@@ -21,7 +21,7 @@ import TutoringRequest from './tutoringRequest.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ProtectedRoute from './lib/protectedRoute.jsx';
 import { Notifications } from '@mantine/notifications';
-import MyProfile from './lib/myProfile.jsx';
+import MyProfile from './myProfile.jsx';
 import StudentDash from './studentDash.jsx';
 
 const router = createBrowserRouter([

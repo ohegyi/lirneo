@@ -1,4 +1,4 @@
-import { useAuth } from "./useAuth"
+import { useAuth } from "./lib/useAuth"
 import { Box, Divider, Image, Marquee, Text } from "@mantine/core"
 import biologyImg from '../assets/biology.jpg'
 import chemistryImg from '../assets/chemistry.jpg'
