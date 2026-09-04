@@ -4,7 +4,6 @@ import './index.css'
   import { DayPilotCalendar, DayPilot } from "@daypilot/daypilot-lite-react";
   import { supabase } from './lib/supabase'
 import './lib/notifications.css';
-  import './App.css'
   import './index.css'
 import '@mantine/dates/styles.css';
 import { IconX ,IconChevronRight} from '@tabler/icons-react';
