@@ -1,17 +1,17 @@
 import { useAuth } from "./lib/useAuth"
 import { Box, Divider, Image, Marquee, Text } from "@mantine/core"
-import biologyImg from '../assets/biology.jpg'
-import chemistryImg from '../assets/chemistry.jpg'
-import chineseImg from '../assets/chinese.jpg'
-import csImg from '../assets/computer science.jpg'
-import englishImg from '../assets/english.png'
-import frenchImg from '../assets/french.jpg'
-import greekImg from '../assets/greek.jpg'
-import historyImg from '../assets/history.jpg'
-import latinImg from '../assets/latin.jpg'
-import mathImg from '../assets/math.jpg'
-import physicsImg from '../assets/physics.jpg'
-import spanishImg from '../assets/spanish.jpg'
+import biologyImg from './assets/biology.jpg'
+import chemistryImg from './assets/chemistry.jpg'
+import chineseImg from './assets/chinese.jpg'
+import csImg from './assets/computer science.jpg'
+import englishImg from './assets/english.png'
+import frenchImg from './assets/french.jpg'
+import greekImg from './assets/greek.jpg'
+import historyImg from './assets/history.jpg'
+import latinImg from './assets/latin.jpg'
+import mathImg from './assets/math.jpg'
+import physicsImg from './assets/physics.jpg'
+import spanishImg from './assets/spanish.jpg'
 import { useNavigate } from "react-router-dom"
 export default function MyProfile(){
     const navigate=useNavigate()
