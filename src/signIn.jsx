@@ -17,10 +17,10 @@ const containerRef = useRef(null);
   useEffect(()=>{
     const timer = setTimeout(()=>{
       setShowing(true)
-    },3900)
+    },3700)
     return ()=> clearTimeout(timer)
   },[])
-  return (<div>
+  return (<div style={{display:'flex', width:'100%', height:'100vh',alignItems:'center', justifyContent:'center'}}>
     <div
 ref={containerRef}
 style={{position: 'relative'}}
@@ -36,7 +36,8 @@ style={{position: 'relative'}}
     falloff="linear"
   />
   <div style={{height:'300px'}}>
-    <div style={{display:'flex', alignItems:'center',justifyContent:'center'}}onClick={()=>{
+    <Button variant='white'>
+    <div style={{color:'black',display:'flex', alignItems:'center',justifyContent:'center'}}onClick={()=>{
       signInWithGoogle()
       }}>
   <SplitText
@@ -57,6 +58,7 @@ style={{position: 'relative'}}
 {showing && <IconArrowNarrowRight stroke={2}/>}
 </div>
 </div>
+</Button>
 </div>
   
 </div>
