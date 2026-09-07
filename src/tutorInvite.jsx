@@ -8,6 +8,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
 import '@mantine/core/styles.css';
 import { Link } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
+import { useAuth } from './lib/useAuth';
 const icon = <IconInfoCircle />
 export default function TutorInvite() {
     const navigate = useNavigate();

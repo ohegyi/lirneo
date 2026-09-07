@@ -7,6 +7,7 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import emailjs from '@emailjs/browser';
 import ProfileCard from "./assets/ProfileCard";
 import { useAuth } from "./lib/useAuth";
+import { notifications } from "@mantine/notifications";
 
 export default function ListSchedule() {
   const navigate = useNavigate();
@@ -130,6 +131,10 @@ function EmailModal({target, request_id, recipients, className}) {
       uploadRequests(item.id)
       sendEmailSchedule(item.email, item.name)
     }
+    navigate('/tutorRequestNotifications')
+    notifications.show({
+      title:'Emails sent'
+    })
   }
   const uploadRequests=async(tutor_id)=>{
     const {data, error}=await supabase.from('tutor_match_invites').upsert({

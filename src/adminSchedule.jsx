@@ -560,6 +560,7 @@ import { notifications } from '@mantine/notifications';
             }
   const handleConfirmation = async()=>{
     for (let i = 0; i<previews.length;i++){
+      navigate('/home')
       //make block
       const block = await addPeriod(previews[i].day+previews[i].start+':00', previews[i].day+previews[i].end+':00')
       //add to proposed tutor blocks
@@ -967,6 +968,7 @@ import { notifications } from '@mantine/notifications';
         <div style={{paddingTop:'10px'}}>
               <Button variant = 'outline' onClick={()=>{
           if (admin){
+            navigate('/home')
             sendEmailSchedule()
           }else{
             if (previewsOrig.length==0){

@@ -14,8 +14,6 @@ import Calendar from './calendar.jsx'
 import ListSchedule from './listSchedule.jsx'
 import AdminSchedule from './adminSchedule.jsx'
 import TutorDash from './tutorDash.jsx'
-import TutorInvite from './tutorInvite.jsx'
-import Profile from './profile.jsx'
 import TutoringRequest from './tutoringRequest.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ProtectedRoute from './lib/protectedRoute.jsx';
@@ -71,10 +69,6 @@ const router = createBrowserRouter([
   {
     path: "/tutorDash",
     element: <TutorDash />,
-  },
-  {
-    path: "/tutorInvite",
-    element: <TutorInvite />,
   },
   {
     path: "/tutoringRequest",

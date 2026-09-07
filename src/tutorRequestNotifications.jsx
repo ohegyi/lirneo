@@ -687,6 +687,9 @@ export default function TutorRequestNotifications() {
       />
       <div style={{paddingTop:'10px'}}>
       <Button variant = 'outline' onClick={()=>{
+            notifications.show({
+                title:'Requests sent'
+            })
           uploadRequestsSetup()
           }}>Send</Button>
           </div>
