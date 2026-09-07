@@ -510,6 +510,13 @@ const ids = [
         backColor: "#94949461",
         borderColor:'transparent',
       },
+      {
+        id: 'a5e5e098-2abf-4475-8453-b8f1ae085b5a',
+        start: "2026-03-23T22:00:00",
+        end: "2026-03-24T08:00:00",
+        backColor: "#94949461",
+        borderColor:'transparent',
+      },
     ];
 
   useEffect(() => {
