@@ -207,7 +207,7 @@ const handleUploadData=async()=>{
   setAllSet(true)
   if (profile.role=='student'){
       await supabase.from('profiles').update({role: 'tutor'}).eq('id', user.id)
-  }else if(profile.role=='tutor'){
+  }else if(profile.role=='tutor'||profile.role=='tutorConfirmed'){
           await supabase.from('profiles').update({role: 'tutorUpdated'}).eq('id', user.id)
   }
   await addStudentInfo()
@@ -330,8 +330,8 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
 
   const getDataComfort=async()=>{
     const { data, error } = await supabase.from('tutors_classes_comfort').select().eq('tutor_id', id)
-    if(data){
-
+    console.log(data)
+    if(data.length!=0){
     let t =[
       {subj:'Science',pressed:false,classesTaken:[],val:[{subject: 'Biology', sliderVal:data[0].biology, backColor:'white'},{subject: 'Ecology', sliderVal:data[0].ecology, backColor:'white'},{subject: 'Chemistry', sliderVal:data[0].chemistry, backColor:'white'},{subject: 'Physics', sliderVal:data[0].physics, backColor:'white'}]},
       {subj:'Math',pressed:false,classesTaken:[],val:[{subject: 'Algebra 1', sliderVal:data[0]['algebra 1'], backColor:'white'},{subject: 'Algebra 2', sliderVal:data[0]['algebra 2'], backColor:'white'},{subject: 'Geometry', sliderVal:data[0].geometry, backColor:'white'},{subject: 'Precalculus', sliderVal:data[0].precalculus, backColor:'white'},{subject: 'Calculus', sliderVal:data[0].calculus, backColor:'white'},{subject: 'Statistics', sliderVal:data[0].statistics, backColor:'white'}]},

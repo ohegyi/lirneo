@@ -840,6 +840,7 @@ import { notifications } from '@mantine/notifications';
           {activeUsers.length==2&&<Button variant='outline'onClick={()=>{setMode(!mode)}}>{mode?'Conglomerate':'Breakdown'}</Button>}
           </div>
           {(activeUsers.length==2)&&(<Button style={{position:'fixed', bottom:'20px', right:'20px', zIndex:100000}} onClick={()=>{
+              navigate('/home')
                 let t = false
                 for (const item of previews){
                   if (item.error == true){
