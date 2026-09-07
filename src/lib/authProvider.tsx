@@ -82,7 +82,7 @@ const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/Home`,
+        redirectTo: `${window.location.origin}/home`,
         queryParams: {
         prompt: "select_account",
       },

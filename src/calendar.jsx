@@ -851,7 +851,7 @@ const handleRejected=async(confirmReject)=>{
 
 }
   const handleSubmission=async()=>{
-    navigate('/Home')
+    navigate('/home')
     notifications.show({
       title:'Schedule Updated'
     })

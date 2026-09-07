@@ -100,7 +100,7 @@ const handleInputChange = (e) => {
         title:'Request Submitted'
       }
     )
-    navigate('/Home')
+    navigate('/home')
     sendEmails()
     }else{
       alert("Fields left blank");

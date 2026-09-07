@@ -216,7 +216,7 @@ const handleUploadData=async()=>{
       await addStudentClass(classItem.id, form, classItem.teacherName)
     }
   }
-  navigate('/Home')
+  navigate('/home')
   notifications.show({
       title: 'Tutor Application Submitted',
   })
@@ -467,7 +467,7 @@ const handleUploadDataAdmin=async()=>{
   }
   await supabase.from('tutors').upsert(t)
   await supabase.from('profiles').update({ role: 'tutorConfirmed' }).eq('id', id)
-  navigate('/Home')
+  navigate('/home')
   notifications.show({
       title: 'Tutor Application Closed',
    })
@@ -478,7 +478,7 @@ const handleRejectAdmin=async()=>{
   await supabase.from('profiles').update({ role: 'student' }).eq('id', id)
   await supabase.from('tutors').delete().eq('id', tutor_id)
   await supabase.from('tutors').delete().eq('id', tutor_id)
-  navigate('/Home')
+  navigate('/home')
   notifications.show({
       title: 'Tutor Application Closed',
    })

@@ -860,7 +860,7 @@ return (
                                                             </div>
                                         </div>
 
-      <Button variant='light'onClick={()=>navigate('/Home')}>Go back home</Button>
+      <Button variant='light'onClick={()=>navigate('/home')}>Go back home</Button>
 
     </div>
     </div>

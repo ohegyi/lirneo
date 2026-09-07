@@ -37,38 +37,38 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 //TODO make student dashbaord to see how their requests are doing
 const mockdata = {
   'student':[
-  { icon: IconHome2, label: 'Home', path:'/Home'},
+  { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/studentDash'},
   { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
   { icon: IconMessagePlus, label: 'Request a Tutor', path:'/tutoringRequest' },
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
 'tutor':[
-  { icon: IconHome2, label: 'Home', path:'/Home'},
+  { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/studentDash'},
   { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
   { icon: IconMessagePlus, label: 'Request a Tutor', path:'/tutoringRequest' },
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
 'tutorUpdated':[
-  { icon: IconHome2, label: 'Home', path:'/Home'},
+  { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/tutorDash' },
   { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
 'tutorConfirmed':[
-  { icon: IconHome2, label: 'Home', path:'/Home'},
+  { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/tutorDash' },
   { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
 'admin':[
-  { icon: IconHome2, label: 'Home', path:'/Home'},
+  { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications' },
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
 'teacher':[
-  { icon: IconHome2, label: 'Home', path:'/Home'},
+  { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/'},
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ]

@@ -77,10 +77,6 @@ const router = createBrowserRouter([
     element: <TutorInvite />,
   },
   {
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
     path: "/tutoringRequest",
     element: <TutoringRequest />,
   },
