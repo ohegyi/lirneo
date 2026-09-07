@@ -412,6 +412,20 @@ let events = [
         backColor: "#94949461",
         borderColor:'transparent',
       },
+      {
+        id: '4273f063-bdc5-4c44-abc1-283e20d73641',
+        start: "2026-03-26T22:00:00",
+        end: "2026-03-27T08:00:00",
+        backColor: "#94949461",
+        borderColor:'transparent',
+      },
+      {
+        id: '98cc1589-b18b-4e3b-bf5f-c5099c537fff',
+        start: "2026-03-27T22:00:00",
+        end: "2026-03-28T08:00:00",
+        backColor: "#94949461",
+        borderColor:'transparent',
+      },
 
     ];
 export default function NewCalendar() {
