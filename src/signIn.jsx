@@ -67,8 +67,8 @@ style={{position: 'relative'}}
 </div>
     </div>
     <Card style ={{backgroundColor:'#eaeaeaff'}} >
-      <Text>lirneo provides an online environment for tutoring programs. With innovative calendar features enhancing administrative porcesses for both schools and tutors, lirneo streamlines and enhances tutoring. lirneo is proud to be helping schools better support their students' needs.</Text>
-      <div style={{display:'flex',gap:'30px',justifyContent:'center', paddingTop:'20px'}}>
+      <Text>lirneo is a tutor management platform for schools and tutoring programs. It streamlines requesting, assigning, and managing tutoring sessions for administrators, tutors, students, and their teachers. By adding administrative oversight to all tutoring, lirneo enables schools to better serve their students.</Text>
+      <div style={{display:'flex',gap:'30px',justifyContent:'center', paddingTop:'20px',paddingTop:'20px'}}>
         <Text component="a" href="https://www.lirneo.com/privacy.html" td="underline" c='dimmed'>Privacy Policy</Text>
         <Text component="a" href="https://www.lirneo.com/terms.html" td="underline" c='dimmed'>Terms of Use</Text>
       </div>
