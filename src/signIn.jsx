@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, Card, ScrollArea, Text } from "@mantine/core";
 import { supabase } from "./lib/supabase";
 import { useAuth } from "./lib/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,10 @@ const containerRef = useRef(null);
     },3700)
     return ()=> clearTimeout(timer)
   },[])
-  return (<div style={{display:'flex', width:'100%', height:'100vh',alignItems:'center', justifyContent:'center'}}>
+  return (
+    <ScrollArea>
+  
+  <div style={{display:'flex', width:'100%', height:'100vh',alignItems:'center', justifyContent:'center'}}>
     <div
 ref={containerRef}
 style={{position: 'relative'}}
@@ -63,5 +66,13 @@ style={{position: 'relative'}}
   
 </div>
     </div>
+    <Card style ={{backgroundColor:'#eaeaeaff'}} >
+      <Text>lirneo provides an online environment for tutoring programs. With innovative calendar features enhancing administrative porcesses for both schools and tutors, lirneo streamlines and enhances tutoring. lirneo is proud to be helping schools better support their students' needs.</Text>
+      <div style={{display:'flex',gap:'30px',justifyContent:'center', paddingTop:'20px'}}>
+        <Text component="a" href="https://www.lirneo.com/privacy.html" td="underline" c='dimmed'>Privacy Policy</Text>
+        <Text component="a" href="https://www.lirneo.com/terms.html" td="underline" c='dimmed'>Terms of Use</Text>
+      </div>
+    </Card>
+    </ScrollArea>
   );
 }
