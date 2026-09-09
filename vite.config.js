@@ -1,13 +1,12 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
-import vitePrerender from 'vite-plugin-prerender' 
-import path from 'path'
+import prerender from 'vite-prerender-plugin'
 
 export default defineConfig({
   plugins: [
     tailwindcss(),
     
-    vitePrerender({ staticDir: path.join(__dirname, 'dist'),routes:['/']})
+    prerender({ renderTarget: '#root', prerenderScript: './prerender.js', }),
   ],
   resolve: {
     dedupe: ['react', 'react-dom'],
