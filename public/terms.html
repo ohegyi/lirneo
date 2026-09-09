@@ -1,82 +1,555 @@
-<p>
-    Terms and Conditions
-Effective date: September 8, 2026 Last updated: September 8, 2026
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-1. Agreement to Terms
-By accessing or using http://www.lirneo.com, you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree, do not use the website.
+  <title>Terms and Conditions | lirneo</title>
 
-These Terms apply to all visitors, users, and others who access lirneo's website ("Service").
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-2. Scope of These Terms
-These Terms govern your use of the Service and all related content, features, and functionality. They do not apply to third-party services or websites that are linked from the Service. Use of the Service is subject to any additional policies referenced herein, including our Privacy Policy.
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f8fafc;
+      color: #1f2937;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+    }
 
-3. Who We Are
-lirneo operates this website. Contact us at lirneotutoring@gmail.com with any questions about these Terms.
+    .terms-container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 50px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
 
-4. Eligibility
-You must be at least 13 years old to use the Service. By creating an account you represent that you meet this age requirement.
+    h1 {
+      margin: 0 0 8px;
+      font-size: 36px;
+      color: #111827;
+      line-height: 1.2;
+    }
 
-Account registration requires accurate and current information. You are responsible for maintaining the confidentiality of your credentials and for all activity under your account. Notify us immediately of any unauthorised use.
+    .last-updated {
+      margin-bottom: 40px;
+      color: #6b7280;
+      font-size: 14px;
+    }
 
-5. Acceptable Use
-You agree not to use the Service for: Illegal activity Harassment or hate speech Spam or unsolicited messages Unauthorized access Copyright infringement Spreading malware.
+    h2 {
+      margin-top: 36px;
+      margin-bottom: 12px;
+      font-size: 21px;
+      color: #111827;
+      line-height: 1.4;
+    }
 
-lirneo reserves the right to suspend or terminate access for any violation of this section or applicable law.
+    h3 {
+      margin-top: 28px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #1f2937;
+    }
 
-6. Intellectual Property
-All content, trademarks, logos, and software on the Service are owned by or licensed to lirneo and are protected by applicable intellectual property laws.
+    p {
+      margin: 0 0 16px;
+      color: #4b5563;
+      font-size: 16px;
+    }
 
-lirneo does not claim ownership over content that belongs to third parties or your own business.
+    ul,
+    ol {
+      margin: 10px 0 20px;
+      padding-left: 28px;
+      color: #4b5563;
+    }
 
-7. Disclaimers
-THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. LIRNEO DISCLAIMS ALL WARRANTIES INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT TO THE FULLEST EXTENT PERMITTED BY LAW.
+    li {
+      margin-bottom: 8px;
+    }
 
-8. Limitation of Liability
-lirneo shall be liable for damages as permitted by applicable law. Certain jurisdictions do not allow limitation of liability for personal injury or consequential damages; in such cases, this limitation may not apply to you.
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
 
-9. Third-Party Services and Links
-The Service may contain links to third-party websites or integrate with third-party services. lirneo has no control over and accepts no responsibility for the content, privacy policies, or practices of those third parties. We recommend reviewing each third party's policies before use.
+    a:hover {
+      text-decoration: underline;
+    }
 
-10. Your Rights and Data
-Your use of the Service is also governed by our Privacy Policy. Where applicable law grants you rights in relation to your personal data, including the rights of access, erasure, rectification, portability, and objection, you may exercise those rights by submitting a Data Subject Access Request (DSAR) to lirneotutoring@gmail.com. We will acknowledge your request within 5 business days and respond within 30 days as required by law.
+    .contact-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8fafc;
+      border-left: 4px solid #2563eb;
+      border-radius: 8px;
+    }
 
-11. Changes to the Service and Terms
-lirneo may modify or discontinue the Service, or update these Terms, at any time. We will provide reasonable notice of material changes by email or through the Service by posting the updated effective date and, where the change is material, a summary of what changed. Continued use after the effective date constitutes acceptance of the updated Terms.
+    .contact-box p {
+      margin-bottom: 6px;
+    }
 
-12. Termination
-These Terms remain in effect while you use the Service. lirneo may suspend or terminate your access for a breach of these Terms, non-payment, or as reasonably necessary to comply with applicable law. You may stop using the Service and close your account at any time. Upon termination, all rights granted to you under these Terms cease. Sections governing intellectual property, liability, indemnification, and dispute resolution survive termination.
+    .annex {
+      margin-top: 50px;
+      padding-top: 35px;
+      border-top: 1px solid #e5e7eb;
+    }
 
-13. Governing Law and Dispute Resolution
-These Terms are governed by the laws of Connecticut, United States, without regard to conflict-of-law principles.
+    .important {
+      font-weight: 700;
+      color: #111827;
+    }
 
-Any dispute arising from these Terms shall be subject to the exclusive jurisdiction of the courts located in Connecticut, United States. You irrevocably consent to personal jurisdiction in those courts. If you are a consumer located in the European Union or the United Kingdom, this clause does not deprive you of the protection afforded by mandatory provisions of the law of the country in which you are resident, and you may bring proceedings in your home courts.
+    .footer {
+      margin-top: 50px;
+      padding-top: 25px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
+    }
 
-14. General Provisions
-These Terms constitute the entire agreement between you and lirneo with respect to the Service and supersede all prior agreements, without excluding any liability for pre-contractual misrepresentation that cannot lawfully be excluded. If any provision is found unenforceable, the remaining provisions shall continue in full force. lirneo's failure to enforce any right or provision shall not constitute a waiver.
+    @media (max-width: 700px) {
+      .terms-container {
+        margin: 0;
+        padding: 30px 20px;
+        border-radius: 0;
+        box-shadow: none;
+      }
 
-15. Contact Us
-If you have questions about these Terms, contact us:
+      h1 {
+        font-size: 30px;
+      }
 
-Email: lirneotutoring@gmail.com
-Response time: We aim to reply within 5 business days.
-Annex A. Additional Compliance Provisions
-The following provisions are part of these Terms and apply to the extent relevant to your jurisdiction and use of the Service.
+      h2 {
+        font-size: 19px;
+      }
 
-Children's Online Privacy (COPPA)
-Because the Service may be accessed by users under 16, we comply with the U.S. Children's Online Privacy Protection Act (COPPA, 15 U.S.C. §§ 6501–6506) and the FTC's COPPA Rule (16 CFR Part 312), as finalized January 16, 2025, published April 22, 2025, and effective June 23, 2025 (compliance deadline April 22, 2026). We do not knowingly collect personal information from children under 13, including biometric identifiers and persistent identifiers used for behavioural advertising, without verifiable parental consent, and we obtain separate opt-in parental consent before using a child's information for targeted advertising. We retain children's personal information only as long as reasonably necessary for the purpose it was collected and maintain a written information-security program. Parents may review, request deletion of, or refuse further collection of their child's information by contacting lirneotutoring@gmail.com.
+      p,
+      li {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
 
-Electronic Signatures and Communications (E-SIGN)
-You consent to receive communications from us in electronic form (including email and in-product notices). Electronic communications satisfy any legal requirement that such communications be in writing. By accepting these Terms electronically, you confirm your agreement under the U.S. Electronic Signatures in Global and National Commerce Act (E-SIGN, 15 U.S.C. §§ 7001–7031) and the Uniform Electronic Transactions Act (UETA) where applicable.
+<body>
 
-Sub-Processors and Third-Party Service Providers
-We engage third-party providers ("sub-processors") to help operate the Service, including hosting, analytics, payment processing, email delivery, and customer support. A current list is available on request. Sub-processors are bound by written contracts that require them to (i) process personal data only on our documented instructions; (ii) implement appropriate technical and organisational security measures; and (iii) assist us in responding to data-subject requests. Where required, we maintain a data processing agreement (DPA) compliant with Article 28 GDPR / UK GDPR.
+  <main class="terms-container">
 
-Force Majeure
-Neither party is liable for failure to perform its obligations under these Terms (other than payment obligations) where the failure results from causes beyond its reasonable control, including acts of God, war, terrorism, civil unrest, government action, pandemic, labour disputes, fire, flood, earthquake, power or telecommunications failure, denial-of-service attacks, or failure of third-party services. The affected party will notify the other promptly and resume performance as soon as reasonably practicable.
+    <h1>Terms and Conditions</h1>
 
-Severability, Waiver, and Assignment
-If any provision of these Terms is held invalid or unenforceable, that provision will be enforced to the maximum extent permissible and the remaining provisions will continue in full force. No waiver of any provision is effective unless in writing. You may not assign these Terms without our prior written consent; we may assign these Terms (including in connection with a merger, acquisition, or sale of assets) on notice to you. Headings are for convenience only.
+    <div class="last-updated">
+      <strong>Effective Date:</strong> September 8, 2026<br>
+      <strong>Last Updated:</strong> September 8, 2026
+    </div>
 
-Indemnification
-You agree to defend, indemnify, and hold harmless lirneo, its affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in any way connected with (i) your access to or use of the Service; (ii) your violation of these Terms or any law; (iii) your User Content; or (iv) your violation of any third-party right.
-</p>
+
+    <h2>1. Agreement to Terms</h2>
+
+    <p>
+      By accessing or using
+      <a href="https://www.lirneo.com">www.lirneo.com</a>
+      (the "Service"), you agree to be bound by these Terms and Conditions
+      ("Terms"). If you do not agree, do not use the Service.
+    </p>
+
+    <p>
+      These Terms apply to all visitors, users, and others who access
+      or use the Service.
+    </p>
+
+
+    <h2>2. Scope of These Terms</h2>
+
+    <p>
+      These Terms govern your use of the Service and all related content,
+      features, and functionality.
+    </p>
+
+    <p>
+      They do not apply to third-party services or websites that are linked
+      from the Service. Use of the Service is also subject to any additional
+      policies referenced herein, including our Privacy Policy.
+    </p>
+
+
+    <h2>3. Who We Are</h2>
+
+    <p>
+      lirneo operates this website.
+    </p>
+
+    <div class="contact-box">
+      <p><strong>Contact:</strong></p>
+      <p>
+        <a href="mailto:lirneotutoring@gmail.com">
+          lirneotutoring@gmail.com
+        </a>
+      </p>
+    </div>
+
+
+    <h2>4. Eligibility</h2>
+
+    <p>
+      You must be at least 13 years old to use the Service. By creating
+      an account, you represent that you meet this age requirement.
+    </p>
+
+    <p>
+      Account registration requires accurate and current information.
+      You are responsible for maintaining the confidentiality of your
+      credentials and for all activity under your account.
+    </p>
+
+    <p>
+      Notify us immediately of any unauthorized use of your account.
+    </p>
+
+
+    <h2>5. Acceptable Use</h2>
+
+    <p>You agree not to use the Service for:</p>
+
+    <ul>
+      <li>Illegal activity</li>
+      <li>Harassment or hate speech</li>
+      <li>Spam or unsolicited messages</li>
+      <li>Unauthorized access</li>
+      <li>Copyright infringement</li>
+      <li>Spreading malware or malicious software</li>
+    </ul>
+
+    <p>
+      lirneo reserves the right to suspend or terminate access for any
+      violation of this section or applicable law.
+    </p>
+
+
+    <h2>6. Intellectual Property</h2>
+
+    <p>
+      All content, trademarks, logos, and software on the Service are owned
+      by or licensed to lirneo and are protected by applicable intellectual
+      property laws.
+    </p>
+
+    <p>
+      lirneo does not claim ownership over content that belongs to third
+      parties or your own business.
+    </p>
+
+
+    <h2>7. Disclaimers</h2>
+
+    <p class="important">
+      THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES
+      OF ANY KIND, EXPRESS OR IMPLIED.
+    </p>
+
+    <p>
+      LIRNEO DISCLAIMS ALL WARRANTIES INCLUDING MERCHANTABILITY, FITNESS
+      FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT TO THE FULLEST EXTENT
+      PERMITTED BY LAW.
+    </p>
+
+
+    <h2>8. Limitation of Liability</h2>
+
+    <p>
+      lirneo shall be liable for damages as permitted by applicable law.
+      Certain jurisdictions do not allow limitation of liability for personal
+      injury or consequential damages; in such cases, this limitation may
+      not apply to you.
+    </p>
+
+
+    <h2>9. Third-Party Services and Links</h2>
+
+    <p>
+      The Service may contain links to third-party websites or integrate
+      with third-party services.
+    </p>
+
+    <p>
+      lirneo has no control over and accepts no responsibility for the
+      content, privacy policies, or practices of those third parties.
+      We recommend reviewing each third party's policies before use.
+    </p>
+
+
+    <h2>10. Your Rights and Data</h2>
+
+    <p>
+      Your use of the Service is also governed by our Privacy Policy.
+    </p>
+
+    <p>
+      Where applicable law grants you rights in relation to your personal
+      data, including the rights of access, erasure, rectification,
+      portability, and objection, you may exercise those rights by submitting
+      a Data Subject Access Request (DSAR) to
+      <a href="mailto:lirneotutoring@gmail.com">
+        lirneotutoring@gmail.com
+      </a>.
+    </p>
+
+    <p>
+      We will acknowledge your request within 5 business days and respond
+      within 30 days as required by law.
+    </p>
+
+
+    <h2>11. Changes to the Service and Terms</h2>
+
+    <p>
+      lirneo may modify or discontinue the Service, or update these Terms,
+      at any time.
+    </p>
+
+    <p>
+      We will provide reasonable notice of material changes by email or
+      through the Service by posting the updated effective date and, where
+      the change is material, a summary of what changed.
+    </p>
+
+    <p>
+      Continued use after the effective date constitutes acceptance of
+      the updated Terms.
+    </p>
+
+
+    <h2>12. Termination</h2>
+
+    <p>
+      These Terms remain in effect while you use the Service.
+      lirneo may suspend or terminate your access for a breach of these
+      Terms, non-payment, or as reasonably necessary to comply with
+      applicable law.
+    </p>
+
+    <p>
+      You may stop using the Service and close your account at any time.
+    </p>
+
+    <p>
+      Upon termination, all rights granted to you under these Terms cease.
+      Sections governing intellectual property, liability, indemnification,
+      and dispute resolution survive termination.
+    </p>
+
+
+    <h2>13. Governing Law and Dispute Resolution</h2>
+
+    <p>
+      These Terms are governed by the laws of Connecticut, United States,
+      without regard to conflict-of-law principles.
+    </p>
+
+    <p>
+      Any dispute arising from these Terms shall be subject to the exclusive
+      jurisdiction of the courts located in Connecticut, United States.
+      You irrevocably consent to personal jurisdiction in those courts.
+    </p>
+
+    <p>
+      If you are a consumer located in the European Union or the United
+      Kingdom, this clause does not deprive you of the protection afforded
+      by mandatory provisions of the law of the country in which you are
+      resident, and you may bring proceedings in your home courts.
+    </p>
+
+
+    <h2>14. General Provisions</h2>
+
+    <p>
+      These Terms constitute the entire agreement between you and lirneo
+      with respect to the Service and supersede all prior agreements,
+      without excluding any liability for pre-contractual misrepresentation
+      that cannot lawfully be excluded.
+    </p>
+
+    <p>
+      If any provision is found unenforceable, the remaining provisions
+      shall continue in full force. lirneo's failure to enforce any right
+      or provision shall not constitute a waiver.
+    </p>
+
+
+    <h2>15. Contact Us</h2>
+
+    <p>
+      If you have questions about these Terms, please contact us:
+    </p>
+
+    <div class="contact-box">
+      <p><strong>lirneo</strong></p>
+      <p>
+        Email:
+        <a href="mailto:lirneotutoring@gmail.com">
+          lirneotutoring@gmail.com
+        </a>
+      </p>
+      <p>Response time: We aim to reply within 5 business days.</p>
+    </div>
+
+
+    <!-- ANNEX -->
+
+    <section class="annex">
+
+      <h2>Annex A. Additional Compliance Provisions</h2>
+
+      <p>
+        The following provisions are part of these Terms and apply to the
+        extent relevant to your jurisdiction and use of the Service.
+      </p>
+
+
+      <h3>Children's Online Privacy (COPPA)</h3>
+
+      <p>
+        Because the Service may be accessed by users under 16, we comply
+        with the U.S. Children's Online Privacy Protection Act (COPPA,
+        15 U.S.C. §§ 6501–6506) and the FTC's COPPA Rule (16 CFR Part 312),
+        as finalized January 16, 2025, published April 22, 2025, and
+        effective June 23, 2025 (compliance deadline April 22, 2026).
+      </p>
+
+      <p>
+        We do not knowingly collect personal information from children
+        under 13, including biometric identifiers and persistent identifiers
+        used for behavioural advertising, without verifiable parental
+        consent, and we obtain separate opt-in parental consent before
+        using a child's information for targeted advertising.
+      </p>
+
+      <p>
+        We retain children's personal information only as long as reasonably
+        necessary for the purpose it was collected and maintain a written
+        information-security program.
+      </p>
+
+      <p>
+        Parents may review, request deletion of, or refuse further collection
+        of their child's information by contacting
+        <a href="mailto:lirneotutoring@gmail.com">
+          lirneotutoring@gmail.com
+        </a>.
+      </p>
+
+
+      <h3>Electronic Signatures and Communications (E-SIGN)</h3>
+
+      <p>
+        You consent to receive communications from us in electronic form,
+        including email and in-product notices. Electronic communications
+        satisfy any legal requirement that such communications be in writing.
+      </p>
+
+      <p>
+        By accepting these Terms electronically, you confirm your agreement
+        under the U.S. Electronic Signatures in Global and National Commerce
+        Act (E-SIGN, 15 U.S.C. §§ 7001–7031) and the Uniform Electronic
+        Transactions Act (UETA) where applicable.
+      </p>
+
+
+      <h3>Sub-Processors and Third-Party Service Providers</h3>
+
+      <p>
+        We engage third-party providers ("sub-processors") to help operate
+        the Service, including hosting, analytics, payment processing,
+        email delivery, and customer support. A current list is available
+        on request.
+      </p>
+
+      <p>Sub-processors are bound by written contracts requiring them to:</p>
+
+      <ol>
+        <li>Process personal data only on our documented instructions.</li>
+        <li>Implement appropriate technical and organizational security measures.</li>
+        <li>Assist us in responding to data-subject requests.</li>
+      </ol>
+
+      <p>
+        Where required, we maintain a data processing agreement (DPA)
+        compliant with Article 28 GDPR / UK GDPR.
+      </p>
+
+
+      <h3>Force Majeure</h3>
+
+      <p>
+        Neither party is liable for failure to perform its obligations
+        (other than payment obligations) where the failure results from
+        causes beyond its reasonable control, including acts of God, war,
+        terrorism, civil unrest, government action, pandemic, labour disputes,
+        fire, flood, earthquake, power or telecommunications failure,
+        denial-of-service attacks, or failure of third-party services.
+      </p>
+
+      <p>
+        The affected party will notify the other promptly and resume
+        performance as soon as reasonably practicable.
+      </p>
+
+
+      <h3>Severability, Waiver, and Assignment</h3>
+
+      <p>
+        If any provision of these Terms is held invalid or unenforceable,
+        that provision will be enforced to the maximum extent permissible
+        and the remaining provisions will continue in full force.
+      </p>
+
+      <p>
+        No waiver of any provision is effective unless in writing.
+        You may not assign these Terms without our prior written consent;
+        we may assign these Terms, including in connection with a merger,
+        acquisition, or sale of assets, on notice to you.
+      </p>
+
+      <p>
+        Headings are for convenience only.
+      </p>
+
+
+      <h3>Indemnification</h3>
+
+      <p>
+        You agree to defend, indemnify, and hold harmless lirneo, its
+        affiliates, officers, directors, employees, and agents from and
+        against any claims, liabilities, damages, losses, and expenses,
+        including reasonable attorneys' fees, arising out of or in any way
+        connected with:
+      </p>
+
+      <ol>
+        <li>Your access to or use of the Service.</li>
+        <li>Your violation of these Terms or any law.</li>
+        <li>Your User Content.</li>
+        <li>Your violation of any third-party right.</li>
+      </ol>
+
+    </section>
+
+
+    <div class="footer">
+      © 2026 lirneo. All rights reserved.
+    </div>
+
+  </main>
+
+</body>
+</html>
+```
