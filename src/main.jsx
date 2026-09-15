@@ -24,7 +24,8 @@ import StudentDash from './studentDash.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
-    element:<SignIn />
+    element:<SignIn />,
+    errorElement: <SignIn />
   },{
     element: (
       <ProtectedRoute>

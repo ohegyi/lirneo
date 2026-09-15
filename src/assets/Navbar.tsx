@@ -34,7 +34,6 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
     </Tooltip>
   );
 }
-//TODO make student dashbaord to see how their requests are doing
 const mockdata = {
   'student':[
   { icon: IconHome2, label: 'Home', path:'/home'},
@@ -69,9 +68,39 @@ const mockdata = {
 ],
 'teacher':[
   { icon: IconHome2, label: 'Home', path:'/home'},
-  { icon: IconCategory, label: 'Dashboard', path:'/'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
-]
+],
+'head|latin|greek':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
+'head|science':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
+'head|french|spanish|chinese':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
+'head|history':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
+'head|english':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
+'head|math|computer science':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorRequestNotifications'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
 }
 ;
 
@@ -79,7 +108,7 @@ const mockdata = {
 
 
 
-type Role = 'student' | 'tutor' | 'tutorUpdated'|'tutorConfirmed' | 'admin' | 'teacher';
+type Role = 'student' | 'tutor' | 'tutorUpdated'|'tutorConfirmed' | 'admin' | 'teacher' | 'head|latin|greek' | 'head|science' | 'head|french|spanish|chinese' | 'head|history' | 'head|english' | 'head|math|computer science';
 //type Icon = 'IconCalendarTime' | 'IconHome2' | 'IconCategory' | 'IconSettings' | 'IconUser' |'IconMessagePlus' | 'IconLogout'
 export function Navbar()  {
 

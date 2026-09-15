@@ -1,17 +1,16 @@
 import './index.css'
 import { useState, useEffect } from 'react'
 import { Button, Card, Drawer, Grid, Input, Loader, Popover, ScrollArea, Slider, Tabs, Text, TextInput } from '@mantine/core';
-import { IconChevronLeft } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { DayPilotCalendar, DayPilot } from "@daypilot/daypilot-lite-react";
 import { supabase } from './lib/supabase'
 import './index.css'
-//TODO: check CS works w/ highlighting
 import { IconInfoCircle } from '@tabler/icons-react';
 import { TimePicker } from '@mantine/dates';
 import '@mantine/core/styles.css';
 import { HugeiconsIcon } from '@hugeicons/react';
 import emailjs from '@emailjs/browser';
-import { RemoveCircleIcon } from '@hugeicons/core-free-icons';
+import { ProfileFreeIcons, RemoveCircleIcon } from '@hugeicons/core-free-icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 const icon = <IconInfoCircle />
 
@@ -29,6 +28,7 @@ import physicsImg from './assets/physics.jpg'
 import spanishImg from './assets/spanish.jpg'
 import { notifications } from '@mantine/notifications';
 import { useAuth } from './lib/useAuth';
+import { CornerDownLeft } from 'lucide-react';
 export default function TutorSetup() {
   const navigate=useNavigate()
   const images={
@@ -53,10 +53,10 @@ export default function TutorSetup() {
   const email=state?.email
   const target = state?.target ?? null
   const editable = state?.editable ?? true
-  console.log(id,name,email,target)
+  
   const [mySubjects, setMySubjects] = useState([
       {subj:'Science',sliderVal:0,backColor:'white',pressed:false,val:[{subject: 'Biology', sliderVal:0, backColor:'white'},{subject: 'Ecology', sliderVal:0, backColor:'white'},{subject: 'Chemistry', sliderVal:0, backColor:'white'},{subject: 'Physics', sliderVal:0, backColor:'white'}]},
-      {subj:'Math',sliderVal:0,backColor:'white',pressed:false,val:[{subject: 'Algebra 1', sliderVal:0, backColor:'white'},{subject: 'Algebra 2', sliderVal:0, backColor:'white'},{subject: 'Geometry', sliderVal:0, backColor:'white'},{subject: 'Precalculus', sliderVal:0, backColor:'white'},{subject: 'Calculus', sliderVal:0, backColor:'white'},{subject: 'Statistics', sliderVal:0, backColor:'white'}]},
+      {subj:'Math',sliderVal1:0,backColor:'white',pressed:false,val:[{subject: 'Algebra 1', sliderVal:0, backColor:'white'},{subject: 'Algebra 2', sliderVal:0, backColor:'white'},{subject: 'Geometry', sliderVal:0, backColor:'white'},{subject: 'Precalculus', sliderVal:0, backColor:'white'},{subject: 'Calculus', sliderVal:0, backColor:'white'},{subject: 'Statistics', sliderVal:0, backColor:'white'}]},
       {subj:'English',sliderVal:0,backColor:'white',pressed:false,val:[{subject: 'English', sliderVal:0, backColor:'white'}]},
       {subj:'History',sliderVal:0,backColor:'white',pressed:false,val:[{subject: 'Foundations of Global History', sliderVal:0, backColor:'white'},{subject: 'Modern Global History', sliderVal:0, backColor:'white'},{subject: 'United States History', sliderVal:0, backColor:'white'}]},
       {subj:'French',sliderVal:0,backColor:'white',pressed:false,val:[{subject: 'French 1', sliderVal:0, backColor:'white'},{subject: 'French 2', sliderVal:0, backColor:'white'},{subject: 'French 3', sliderVal:0, backColor:'white'},{subject: 'French 4', sliderVal:0, backColor:'white'},{subject: 'AP French', sliderVal:0, backColor:'white'},{subject: 'French 6', sliderVal:0, backColor:'white'}]},
@@ -89,10 +89,11 @@ export default function TutorSetup() {
     }
   const [curForm, setCurForm] = useState('0')
   const [curSubject, setCurSubject] = useState('0')
-  const [allSet, setAllSet] = useState(0)
+  const [subjectsMain, setSubjectsMain] = useState([])
   const [ranking, setRanking] = useState(false)
   const [finishSubjects, setFinishSubjects] = useState([])
   const [curClasses, setCurClasses]=useState([])
+  const [readyAdmin,setReadyAdmin]=useState(true)
   const [added, setAdded]=useState([[],[],[],[],[]])
   const [deleted, setDeleted]=useState([])
   const [message, setMessage] = useState('')
@@ -121,8 +122,10 @@ export default function TutorSetup() {
       setUser(profile);
       await getDataUser(profile.id)
     }
-    await getClasses()
-    await getTeachers()
+    if (editable){
+      await getClasses()
+      await getTeachers()
+    }
     setLoad(false)
   };
 
@@ -175,16 +178,18 @@ setAdded(prev =>
 }
 
 const makeSupabaseReady=()=>{
+  console.log('HERE',mySubjects)
   let temp={'tutor_id': user.id}
   for (const subject of mySubjects){
     for (const val of subject.val){
-      temp={...temp, [val.subject.toLocaleLowerCase()]: val.sliderVal}
+      temp={...temp, [val.subject.toLocaleLowerCase()]: subject.sliderVal==0?'0 1':`${val.sliderVal} 1`}
     }
   }
   return temp
 }
 const addStudentInfo = async()=>{
   const d = makeSupabaseReady()
+  console.log(d)
       const {data, error}=await supabase.from('tutors_classes_comfort').upsert(d)
       for (const d of deleted){
         deleteStudentClass(d)
@@ -204,11 +209,10 @@ const addStudentClass = async(classid,index,teacher)=>{
           return
 }
 const handleUploadData=async()=>{
-  setAllSet(true)
   if (profile.role=='student'){
       await supabase.from('profiles').update({role: 'tutor'}).eq('id', user.id)
   }else if(profile.role=='tutor'||profile.role=='tutorConfirmed'){
-          await supabase.from('profiles').update({role: 'tutorUpdated'}).eq('id', user.id)
+      await supabase.from('profiles').update({role: 'tutorUpdated'}).eq('id', user.id)
   }
   await addStudentInfo()
   for (let form=0; form<added.length; form++){
@@ -217,10 +221,13 @@ const handleUploadData=async()=>{
     }
   }
   navigate('/home')
+  console.log('HERE')
+  sendEmailsNewTutor()
   notifications.show({
       title: 'Tutor Application Submitted',
   })
 }
+
 const handleInputChange = (e) => { 
     const searchTerm = e.target.value;
     setSearchItem(searchTerm)
@@ -329,54 +336,139 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
 
 
   const getDataComfort=async()=>{
-    const { data, error } = await supabase.from('tutors_classes_comfort').select().eq('tutor_id', id)
+    console.log('inside')
+    const { data, error } = await supabase.from('tutors_classes_comfort').select().eq('tutor_id', id).maybeSingle()
     console.log(data)
-    if(data.length!=0){
-    let t =[
-      {subj:'Science',pressed:false,classesTaken:[],val:[{subject: 'Biology', sliderVal:data[0].biology, backColor:'white'},{subject: 'Ecology', sliderVal:data[0].ecology, backColor:'white'},{subject: 'Chemistry', sliderVal:data[0].chemistry, backColor:'white'},{subject: 'Physics', sliderVal:data[0].physics, backColor:'white'}]},
-      {subj:'Math',pressed:false,classesTaken:[],val:[{subject: 'Algebra 1', sliderVal:data[0]['algebra 1'], backColor:'white'},{subject: 'Algebra 2', sliderVal:data[0]['algebra 2'], backColor:'white'},{subject: 'Geometry', sliderVal:data[0].geometry, backColor:'white'},{subject: 'Precalculus', sliderVal:data[0].precalculus, backColor:'white'},{subject: 'Calculus', sliderVal:data[0].calculus, backColor:'white'},{subject: 'Statistics', sliderVal:data[0].statistics, backColor:'white'}]},
-      {subj:'English',pressed:false,classesTaken:[],val:[{subject: 'English', sliderVal:data[0].english, backColor:'white'}]},
-      {subj:'History',pressed:false,classesTaken:[],val:[{subject: 'Foundations of Global History', sliderVal:data[0]['foundations of global history'], backColor:'white'},{subject: 'Modern Global History', sliderVal:data[0]['modern global history'], backColor:'white'},{subject: 'United States History', sliderVal:data[0]['united states history'], backColor:'white'}]},
+    if(data){
+    const valtoSubj={
+      'science':{subj:'Science',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Biology', sliderVal:parseInt(data.biology.split(' ')[0]), backColor:'white'},{subject: 'Ecology', sliderVal:parseInt(data.ecology.split(' ')[0]), backColor:'white'},{subject: 'Chemistry', sliderVal:parseInt(data.chemistry.split(' ')[0]), backColor:'white'},{subject: 'Physics', sliderVal:parseInt(data.physics.split(' ')[0]), backColor:'white'}]},
+      'math':{subj:'Math',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Algebra 1', sliderVal:parseInt(data['algebra 1'].split(' ')[0]), backColor:'white'},{subject: 'Algebra 2', sliderVal:parseInt(data['algebra 2'].split(' ')[0]), backColor:'white'},{subject: 'Geometry', sliderVal:parseInt(data.geometry.split(' ')[0]), backColor:'white'},{subject: 'Precalculus', sliderVal:parseInt(data.precalculus.split(' ')[0]), backColor:'white'},{subject: 'Calculus', sliderVal:parseInt(data.calculus.split(' ')[0]), backColor:'white'},{subject: 'Statistics', sliderVal:parseInt(data.statistics.split(' ')[0]), backColor:'white'}]},
+      'english':{subj:'English',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'English', sliderVal:parseInt(data.english.split(' ')[0]), backColor:'white'}]},
+      'history':{subj:'History',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Foundations of Global History', sliderVal:parseInt(data['foundations of global history'].split(' ')[0]), backColor:'white'},{subject: 'Modern Global History', sliderVal:parseInt(data['modern global history'].split(' ')[0]), backColor:'white'},{subject: 'United States History', sliderVal:parseInt(data['united states history'].split(' ')[0]), backColor:'white'}]},
+      'french':{subj:'French',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'French 1', sliderVal:parseInt(data['french 1'].split(' ')[0]), backColor:'white'},{subject: 'French 2', sliderVal:parseInt(data['french 2'].split(' ')[0]), backColor:'white'},{subject: 'French 3', sliderVal:parseInt(data['french 3'].split(' ')[0]), backColor:'white'},{subject: 'French 4', sliderVal:parseInt(data['french 4'].split(' ')[0]), backColor:'white'},{subject: 'AP French', sliderVal:parseInt(data['ap french'].split(' ')[0]), backColor:'white'},{subject: 'French 6', sliderVal:parseInt(data['french 6'].split(' ')[0]), backColor:'white'}]},
+      'spanish':{subj:'Spanish',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Spanish 1', sliderVal:parseInt(data['spanish 1'].split(' ')[0]), backColor:'white'},{subject: 'Spanish 2', sliderVal:parseInt(data['spanish 2'].split(' ')[0]), backColor:'white'},{subject: 'Spanish 3', sliderVal:parseInt(data['spanish 3'].split(' ')[0]), backColor:'white'},{subject: 'Spanish 4', sliderVal:parseInt(data['spanish 4'].split(' ')[0]), backColor:'white'},{subject: 'AP Spanish', sliderVal:parseInt(data['ap spanish'].split(' ')[0]), backColor:'white'},{subject: 'Spanish 6', sliderVal:parseInt(data['spanish 6'].split(' ')[0]), backColor:'white'}]},
+      'chinese':{subj:'Chinese',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Chinese 1', sliderVal:parseInt(data['chinese 1'].split(' ')[0]), backColor:'white'},{subject: 'Chinese 2', sliderVal:parseInt(data['chinese 2'].split(' ')[0]), backColor:'white'},{subject: 'Chinese 3', sliderVal:parseInt(data['chinese 3'].split(' ')[0]), backColor:'white'},{subject: 'Chinese 4', sliderVal:parseInt(data['chinese 4'].split(' ')[0]), backColor:'white'},{subject: 'AP Chinese', sliderVal:parseInt(data['ap chinese'].split(' ')[0]), backColor:'white'},{subject: 'Chinese 6', sliderVal:parseInt(data['chinese 6'].split(' ')[0]), backColor:'white'}]},
+      'latin':{subj:'Latin',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Latin 1', sliderVal:parseInt(data['latin 1'].split(' ')[0]), backColor:'white'},{subject: 'Latin 2', sliderVal:parseInt(data['latin 2'].split(' ')[0]), backColor:'white'},{subject: 'Latin 3', sliderVal:parseInt(data['latin 3'].split(' ')[0]), backColor:'white'},{subject: 'Latin 4', sliderVal:parseInt(data['latin 4'].split(' ')[0]), backColor:'white'},{subject: 'AP Latin', sliderVal:parseInt(data['ap latin'].split(' ')[0]), backColor:'white'},{subject: 'Latin 5', sliderVal:parseInt(data['latin 5'].split(' ')[0]), backColor:'white'}]},
+      'greek':{subj:'Greek',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Greek 1', sliderVal:parseInt(data['greek 1'].split(' ')[0]), backColor:'white'},{subject: 'Greek 2', sliderVal:parseInt(data['greek 2'].split(' ')[0]), backColor:'white'},{subject: 'Greek 3', sliderVal:parseInt(data['greek 3'].split(' ')[0]), backColor:'white'}]},
+      'computer science':{subj:'Computer Science',sliderVal:0,classesTaken:[],pressed:false,val:[{subject: 'AP Computer Science', sliderVal:parseInt(data['ap computer science'].split(' ')[0]), backColor:'white'},{subject: 'Data Structures', sliderVal:parseInt(data['data structures'].split(' ')[0]), backColor:'white'}]}
+    }
+      let isHead=profile.role.substring(0,4)=='head'
+      console.log(isHead)
+      let subjects=isHead?profile.role.split('|').slice(1):[]
+    let t =isHead?[]:[
+      valtoSubj['science'],
+      valtoSubj['math'],
+      valtoSubj['english'],
+      valtoSubj['history'],
     ]
-    setFinishSubjects([
-      {subj:'English',sliderVal:0,pressed:false},
-      {subj:'Math',sliderVal:0,pressed:false},
-      {subj:'History',sliderVal:0,pressed:false}
-      ])    
-    if (data[0]['chemistry']!=0){
-      setFinishSubjects(prev=>[...prev, {subj:'Chemistry',classesTaken:[],sliderVal:0,pressed:false}])
+    let f=[]
+     if (parseInt(data['algebra 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('math')))){
+      f.push({subj:'Math',classesTaken:[],sliderVal:data['algebra 1'].split(' ')[1],pressed:false})
+      if (data['algebra 1'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='math')
     }
-    if (data[0]['physics']!=0){
-      setFinishSubjects(prev=>[...prev, {subj:'Physics',classesTaken:[],sliderVal:0,pressed:false}])
+    if (parseInt(data['english'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('english')))){
+      f.push({subj:'English',classesTaken:[],sliderVal:data['english'].split(' ')[1],pressed:false})
+      if (data['english'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='english')
     }
-    if (data[0]['biology']!=0){
-      setFinishSubjects(prev=>[...prev, {subj:'Biology',classesTaken:[],sliderVal:0,pressed:false}])
+    if (parseInt(data['foundations of global history'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('history')))){
+      f.push({subj:'History',classesTaken:[],sliderVal:data['foundations of global history'].split(' ')[1],pressed:false})
+      if (data['foundations of global history'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='history')
     }
-    if (data[0]['ecology']!=0){
-      setFinishSubjects(prev=>[...prev, {subj:'Ecology',classesTaken:[],sliderVal:0,pressed:false}])
+    if (!isHead||(isHead&& subjects.includes('science'))){
+      if (parseInt(data.chemistry.split(' ')[0])!=0){
+      f.push({subj:'Chemistry',classesTaken:[],sliderVal:data.chemistry.split(' ')[1],pressed:false})
+      subjects.push('chemistry')
+      if (data['chemistry'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
     }
-    if (data[0]['french 1']!=0){
-      t=[...t, {subj:'French',pressed:false,classesTaken:[],val:[{subject: 'French 1', sliderVal:data[0]['french 1'], backColor:'white'},{subject: 'French 2', sliderVal:data[0]['french 2'], backColor:'white'},{subject: 'French 3', sliderVal:data[0]['french 3'], backColor:'white'},{subject: 'French 4', sliderVal:data[0]['french 4'], backColor:'white'},{subject: 'AP French', sliderVal:data[0]['ap french'], backColor:'white'},{subject: 'French 6', sliderVal:data[0]['french 6'], backColor:'white'}]}]
-      setFinishSubjects(prev=>[...prev, {subj:'French',classesTaken:[],sliderVal:0,pressed:false}])
-    }if (data[0]['spanish 1']!=0){
-      t=[...t, {subj:'Spanish',pressed:false,classesTaken:[],val:[{subject: 'Spanish 1', sliderVal:data[0]['spanish 1'], backColor:'white'},{subject: 'Spanish 2', sliderVal:data[0]['spanish 2'], backColor:'white'},{subject: 'Spanish 3', sliderVal:data[0]['spanish 3'], backColor:'white'},{subject: 'Spanish 4', sliderVal:data[0]['spanish 4'], backColor:'white'},{subject: 'AP Spanish', sliderVal:data[0]['ap spanish'], backColor:'white'},{subject: 'Spanish 6', sliderVal:data[0]['spanish 6'], backColor:'white'}]},]
-      setFinishSubjects(prev=>[...prev,{subj:'Spanish',sliderVal:0,pressed:false}])
-    }if (data[0]['chinese 1']!=0){
-      t=[...t, {subj:'Chinese',pressed:false,classesTaken:[],val:[{subject: 'Chinese 1', sliderVal:data[0]['chinese 1'], backColor:'white'},{subject: 'Chinese 2', sliderVal:data[0]['chinese 2'], backColor:'white'},{subject: 'Chinese 3', sliderVal:data[0]['chinese 3'], backColor:'white'},{subject: 'Chinese 4', sliderVal:data[0]['chinese 4'], backColor:'white'},{subject: 'AP Chinese', sliderVal:data[0]['ap chinese'], backColor:'white'},{subject: 'Chinese 6', sliderVal:data[0]['chinese 6'], backColor:'white'}]}]
-      setFinishSubjects(prev=>[...prev,{subj:'Chinese',sliderVal:0,pressed:false}])
-    }if (data[0]['latin 1']!=0){
-      t=[...t, {subj:'Latin',pressed:false,classesTaken:[],val:[{subject: 'Latin 1', sliderVal:data[0]['latin 1'], backColor:'white'},{subject: 'Latin 2', sliderVal:data[0]['latin 2'], backColor:'white'},{subject: 'Latin 3', sliderVal:data[0]['latin 3'], backColor:'white'},{subject: 'Latin 4', sliderVal:data[0]['latin 4'], backColor:'white'},{subject: 'AP Latin', sliderVal:data[0]['ap latin'], backColor:'white'},{subject: 'Latin 5', sliderVal:data[0]['latin 5'], backColor:'white'}]}]
-      setFinishSubjects(prev=>[...prev,{subj:'Latin',sliderVal:0,pressed:false}])
-    }if (data[0]['greek 1']!=0){
-      t=[...t, {subj:'Greek',pressed:false,classesTaken:[],val:[{subject: 'Greek 1', sliderVal:data[0]['greek 1'], backColor:'white'},{subject: 'Greek 2', sliderVal:data[0]['greek 2'], backColor:'white'},{subject: 'Greek 3', sliderVal:data[0]['greek 3'], backColor:'white'}]}]
-      setFinishSubjects(prev=>[...prev,{subj:'Greek',sliderVal:0,pressed:false}])
-    }if (data[0]['ap computer science']!=0 && data[0]['data structures']!=0){
-      t=[...t, {subj:'Computer Science',classesTaken:[],pressed:false,val:[{subject: 'AP Computer Science', sliderVal:data[0]['ap computer science'], backColor:'white'},{subject: 'Data Structures', sliderVal:data[0]['data structures'], backColor:'white'}]}]
-      setFinishSubjects(prev=>[...prev,{subj:'Computer Science',sliderVal:0,pressed:false}])
+    if (parseInt(data.physics.split(' ')[0])!=0){
+      f.push({subj:'Physics',classesTaken:[],sliderVal:data.physics.split(' ')[1],pressed:false})
+      subjects.push('physics')
+      if (data['physics'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
     }
+    if (parseInt(data.biology.split(' ')[0])!=0){
+      f.push({subj:'Biology',classesTaken:[],sliderVal:data.biology.split(' ')[1],pressed:false})
+      subjects.push('biology')
+      if (data['biology'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }
+    if (parseInt(data.ecology.split(' ')[0])!=0){
+      f.push({subj:'Ecology',classesTaken:[],sliderVal:data.ecology.split(' ')[1],pressed:false})
+      subjects.push('ecology')
+      if (data['ecology'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }}
+      subjects.filter(item=>item=='science')
+    if (parseInt(data['french 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('french')))){
+      t=[...t, valtoSubj['french']]
+      f.push({subj:'French',classesTaken:[],sliderVal:data['french 1'].split(' ')[1],pressed:false})
+      if (data['french 1'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='french')
+    }if (parseInt(data['spanish 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('spanish')))){
+      t=[...t, valtoSubj['spanish']]
+      f.push({subj:'Spanish',sliderVal:data['spanish 1'].split(' ')[1],pressed:false})
+      if (data['spanish 1'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='spanish')
+    }if (parseInt(data['chinese 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('chinese')))){
+      t=[...t, valtoSubj['chinese']]
+      f.push({subj:'Chinese',sliderVal:data['chinese 1'].split(' ')[1],pressed:false})
+      if (data['chinese 1'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='chinese')
+    }if (parseInt(data['latin 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('latin')))){
+      t=[...t, valtoSubj['latin']]
+      f.push({subj:'Latin',sliderVal:data['latin 1'].split(' ')[1],pressed:false})
+      if (data['latin 1'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='latin')
+    }if (parseInt(data['greek 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('greek')))){
+      t=[...t, valtoSubj['greek']]
+      f.push({subj:'Greek',sliderVal:data['greek 1'].split(' ')[1],pressed:false})
+      if (data['greek 1'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='greek')
+    }if (parseInt(data['ap computer science'].split(' ')[0])!=0 && parseInt(data['data sttructures'].split(' ')[0])!=0 &&(!isHead||(isHead&& subjects.includes('computer science')))){
+      t=[...t, valtoSubj['computer science']]
+      f.push({subj:'Computer Science',sliderVal:data['data structures'].split(' ')[1],pressed:false})
+      if (data['data structures'].split(' ')[1]==1){
+        setReadyAdmin(false)
+      }
+    }else{
+      subjects.filter(item=>item=='computer science')
+    }
+    setFinishSubjects(f)
+    setSubjectsMain(subjects)
     getStudentClasses(t)
-
-  }
+}
 }
 const getStudentClasses=async(x)=>{
     const {data,error}=await supabase.from('tutor_class').select(('Classes(*), years_ago, teacher_name')).eq('tutor_id',id)
@@ -388,8 +480,8 @@ const getStudentClasses=async(x)=>{
       subj = p.Classes.subject
       j=j.map(subject =>{
           if (subject.subj.toLowerCase() === 'science'){
-            if (subj =='biology' || subj =='chemsitry'|| subj =='physics'||subj =='ecology'){
-              return {...subject, classesTaken: [
+            if (subj =='biology' || subj =='chemistry'|| subj =='physics'||subj =='ecology'){
+              return {...subject,classesTaken: [
                       ...subject.classesTaken,
                       {
                         id: p.Classes.id,
@@ -428,7 +520,6 @@ const getStudentClasses=async(x)=>{
       setCurSubject(heretoThere[target])
       j=j.map((item)=>{
         if (item.subj == heretoThere[target]){
-          console.log('SUBJECT',item)
           setCurClasses(item.classesTaken)
           return {...item, pressed:true}
         }else{
@@ -440,6 +531,128 @@ const getStudentClasses=async(x)=>{
     setMyClasses(t)
     return true
   }
+const sendEmailsNewTutor=async()=>{
+  const subjToHead={
+    'Science':'head|science',
+    'Chemistry':'head|science',
+    'Biology':'head|science',
+    'Physics':'head|science',
+    'Ecology':'head|science',
+
+    'Spanish':'head|french|spanish|chinese',
+    'French':'head|french|spanish|chinese',
+    'Chinese':'head|french|spanish|chinese',
+
+    'Latin':'head|latin|greek',
+    'Greek':'head|latin|greek',
+
+    'History':'head|history',
+
+    'English':'head|english',
+
+    'Math':'head|math|computer science',
+    'Computer Science':'head|math|computer science',
+  }
+  let nameEmails={}
+  console.log(mySubjects)
+  for (const subj of mySubjects){
+    console.log(subj.subj, subj.sliderVal)
+    if(subj.sliderVal!=0){
+      console.log(subj)
+      const {data}=await supabase.from('profiles').select('name,email').eq('role',subjToHead[subj.subj]).maybeSingle()
+      console.log(data, subjToHead[subj.subj])
+      nameEmails[data.name]=data.email
+    }
+  }
+  
+  for (const [name, email] of Object.entries(nameEmails)){
+    console.log(name, email)
+    sendEmailHead(name, email)
+  }
+  const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
+        for (const admin1 of data){
+          sendOrigAdmin(admin1.name,admin1.email)
+        }
+}
+const handleHeadUpdate=async()=>{
+  const subjtodb={
+    'Chemistry':'chemistry',
+    'Biology':'biology',
+    'Physics':'physics',
+    'Ecology':'ecology',
+
+    'French':'french 1',
+    'Spanish':'spanish 1',
+    'Chinese':'chinese 1',
+
+    'Latin':'latin 1',
+    'Greek':'greek 1',
+
+    'Math':'algebra 1',
+    'Computer Science':'data structures',
+
+    'English':'english',
+
+    'History':'foundations of global history',
+  }
+  for (const subj of finishSubjects){
+    const {data} = await supabase.from('tutors_classes_comfort').select(`*`).eq('tutor_id', id).maybeSingle()
+    const{error} = await supabase.from('tutors_classes_comfort').update({[subjtodb[subj.subj]]:`${data[subjtodb[subj.subj]].split(' ')[0]} ${subj.sliderVal==1?0:subj.sliderVal}`}).eq('tutor_id', id)
+    console.log(error)
+  }
+  const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
+        for (const admin1 of data){
+          sendSubjectAdmin(admin1.name,admin1.email)
+        }
+  navigate('/home')
+  notifications.show({
+    title:'Application updated'
+  })
+
+}
+const sendSubjectAdmin=async(adminName, adminEmail)=>{
+  const templateParams = {
+                email : adminEmail,
+                name : adminName,
+                teacher : profile.name,
+                student: name
+            };
+            emailjs.send(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                'template_3ur1gki',
+                templateParams,
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+                )
+                .catch((error) => console.log(error));
+}
+const sendEmailHead=async(teacherName, teacherEmail)=>{
+  const templateParams = {
+                email : teacherEmail,
+                name : profile.name,
+                teacher : teacherName,
+            };
+            emailjs.send(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                'template_o8ngjt6',
+                templateParams,
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+                )
+                .catch((error) => console.log(error));
+}
+const sendOrigAdmin=async(adminName, adminEmail)=>{
+  const templateParams = {
+                email : adminEmail,
+                name : profile.name,
+                admin : adminName,
+            };
+            emailjs.send(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                'template_htqv07a',
+                templateParams,
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+                )
+                .catch((error) => console.log(error));
+}
 const sendAdminEmail=async(action)=>{
         const templateParams = {
                 name : name,
@@ -540,8 +753,6 @@ return (
               )
             );
           }
-          //subject.pressed=true
-          //subject.backColor='#c9e9f6'
           }} value={subject.subj}>{subject.subj}</Tabs.Tab>
           
       ))}
@@ -556,6 +767,7 @@ return (
             <div key={s.subject} style={{display:'flex', flexDirection:'row', alignItems:'center', marginRight:'20px'}}>
              <div style={{marginRight:'10px', width:'55%'}}> <Text truncate="end">{s.subject}</Text></div>
               <Slider
+              label={null}
                 color={s.sliderVal <= 50 ? `rgba(255,${(s.sliderVal)*(255/50)},0,${(50-s.sliderVal)/50+0.5})`:`rgba(${(100-s.sliderVal)*(255/50)},255, 0,${(s.sliderVal-50)/100+0.5})`}
                 style={{width:'40%', position:'absolute', right:'5%'}}
                 value={s.sliderVal}
@@ -626,25 +838,32 @@ return (
         >Approve {name} to be a tutor in...</Text>
       {finishSubjects.map(subject => (
         <div key={subject.subj}style={{display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'10px'}}>
-          <p onClick={()=>{
+          <p style={{color:(subject.sliderVal==1&&profile.role=='admin')?'grey':'black'}} onClick={()=>{
             
           }}>{subject.subj}</p>
           <Slider
+          label={null}
           color={subject.sliderVal<=50?`rgba(255,${(subject.sliderVal)*(255/50)},0,${(50-subject.sliderVal)/50+0.5})`:`rgba(${(100-subject.sliderVal)*(255/50)},255, 0,${(subject.sliderVal-50)/100+0.5})`}
                 style={{width:'200px'}}
                 value={subject.sliderVal}
-                onChange={(newValue) => handleSliderChangeBig(newValue, subject.subj)}
+                onChange={(newValue) => {if(profile.role.substring(0,4)=='head'){handleSliderChangeBig(newValue, subject.subj)}}}
           />
         
         </div>
       ))}
-      <div stle={{paddingBottom:'20px'}}>
+      
+      {(profile.role.substring(0,4)!='head'&& readyAdmin)&&<div stle={{paddingBottom:'20px'}}>
       <TextInput label={"Message to " +name} style={{height:'30px'}}value={message} onChange={(e) => setMessage(e.target.value)}/>
-        </div>
+        </div>}
+      {(profile.role.substring(0,4)!='head'&& readyAdmin)&&
       <div style={{display:'flex', gap:'10px',justifyContent:'flex-end', paddingTop:'50px'}}>
       <Button variant='light' onClick={handleUploadDataAdmin}>Approve</Button>
       <Button variant='light' color='red' onClick={handleRejectAdmin}>Reject</Button>
-      </div>
+      </div>}
+      {profile.role.substring(0,4)=='head'&&
+      <div style={{position:'absolute', bottom:'10px', right:'10px'}}>
+      <Button variant='light' onClick={handleHeadUpdate}>Next<IconChevronRight stroke={2}/></Button>
+      </div>}
       </div>
       </Drawer>
 
@@ -796,8 +1015,7 @@ return (
   display: 'flex',
   justifyContent: 'center',
 }}>
-  
-    <Card key = {o.id} miw = '200px' maw='250px' padding="0" style={{ miw:'250px', containerType: 'inline-size',width: '100%', aspectRatio: '16 / 9', backgroundColor:'white', color:'black', borderColor:'#cbcbcbff'}} withBorder orientation="horizontal">
+    {(profile.role.substring(0,4)!='head'||(profile.role.substring(0,4)=='head'&&subjectsMain.includes(o.subject)))&&<Card key = {o.id} miw = '200px' maw='250px' padding="0" style={{ miw:'250px', containerType: 'inline-size',width: '100%', aspectRatio: '16 / 9', backgroundColor:'white', color:'black', borderColor:'#cbcbcbff'}} withBorder orientation="horizontal">
     <img src={images[o.subject]}
     style={{width:'100cqw', height:'auto', position:'absolute', bottom:'40%'}}
     />
@@ -899,7 +1117,7 @@ return (
         <div style={{width:'100px'}}>
        
     </div>
-    </Card>
+    </Card>}
     </Grid.Col>
 ))}
 </Grid>

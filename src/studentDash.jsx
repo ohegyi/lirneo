@@ -72,7 +72,6 @@ export default function StudentDash(){
     useEffect(()=>{
         getRequests()
     })
-    //todo button to confirm for proposed
     const getMoreInfo = async(request_id, progress, className)=>{
         if(progress=='proposed'||progress=='confirmed'){
             const {data, error} = await supabase.from('tutor_match').select(`

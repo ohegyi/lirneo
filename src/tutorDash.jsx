@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { useNavigate } from "react-router-dom";
-import { Divider, Loader } from "@mantine/core";
+import { Divider, Grid, Loader, SegmentedControl } from "@mantine/core";
 import { Drawer, Button,Text, Scroller, Group} from '@mantine/core';
 import ProfileCard from './assets/ProfileCard.jsx'
 import ClassCard from "./assets/classCard.jsx";
 import { useAuth } from "./lib/useAuth.js";
 
+
 export default function TutorDash() {
     const {profile, getAvatarUrl} = useAuth()
     const user = profile
     const [mode,setMode]=useState(0)
+    const [modeTutor, setModeTutor]=useState(0)
     const datesDays={'22':'Monday,', '23':'Tuesday,','24':'Wednesday,','25':'Thursday,','26':'Friday,','27':'Saturday,','28':'Sunday,'}
     const datesTimes={
         '00':['12', 'am'],
@@ -218,16 +220,24 @@ export default function TutorDash() {
                     </div>
                     </div>
             <div>
-            {mode==0 && <div>
-                {Object.keys(mine[0]).length>0 && <div>
-                    <div style={{justifyContent: 'align-start' }}>
-                    <Text c= 'dimmed' fz='4vh' >My Students:</Text>
-                    </div>
-                    <Scroller draggable>
-                        <Group gap="xs" wrap="nowrap">
-                    {Object.entries(mine[0]).map(([student_id, tutees]) => (
-                            <div
+                 <SegmentedControl
+                      value={modeTutor}
+                      onChange={setModeTutor}
+                      data={[
+                        { label: 'My Students', value: 0 },
+                        { label: 'Action Required', value: 1 },
+                        { label: 'Pending', value: 2 },
+                      ]}
+                    />
+            {mode==0 &&
+            <div style={{padding:'20px'}}>
+                <Grid align="stretch" style={{width:'90%'}}>
+                {(modeTutor==0&&Object.keys(mine[0]).length>0) &&
+                    Object.entries(mine[0]).map(([student_id, tutees]) => (
+                            <Grid.Col
+                                span={{ base: 12, md: 4, lg: 3 }}
                                 key={student_id}
+                                
                                 onClick={async () => {
                                     const posts = await Promise.all(
                                         tutees.map(async (t) => ({
@@ -242,20 +252,14 @@ export default function TutorDash() {
                             >
                                 <ProfileCard imageSrc={urls[tutees[0].avatar_url]} name={tutees[0].name} classNames={tutees.map(tutoring => tutoring.className).join(', ')} cardType='Active'/>
                                 
-                            </div>
+                            </Grid.Col>
                 ))}
-                </Group>
-                </Scroller>
-                </div>
-                }
-            {Object.keys(mine[1]).length>0 && <div>
-                    <div style={{justifyContent: 'align-start' }}>
-                    <Text c= 'dimmed' fz='4vh'>Action Required:</Text>
-                    </div>
-                    <Scroller draggable>
-                        <Group gap="xs" wrap="nowrap">
-                    {Object.entries(mine[1]).map(([student_id, tutees]) => (
-                            <div
+                
+            
+            {(modeTutor==1&&Object.keys(mine[1]).length>0) &&
+                    Object.entries(mine[1]).map(([student_id, tutees]) => (
+                            <Grid.Col
+                            span={{ base: 12, md: 4, lg: 3 }}
                                 key={student_id}
                                  onClick={async () => {
                                     const posts = await Promise.all(
@@ -270,18 +274,13 @@ export default function TutorDash() {
                             >
                                 <ProfileCard imageSrc={urls[tutees[0].avatar_url]} name={tutees[0].name} classNames={tutees.map(tutoring => tutoring.className).join(', ')} cardType='Rejected'/>
                                 
-                            </div>
-                ))}
-                </Group>
-                </Scroller>
-                </div>
+                            </Grid.Col>
+                ))
                 }
-            {Object.keys(mine[2]).length>0 && <div>
-                    <Text c= 'dimmed' fz='4vh'>Pending:</Text>
-                    <Scroller draggable>
-                        <Group gap="xs" wrap="nowrap">
-                    {Object.entries(mine[2]).map(([student_id, tutees]) => (
-                            <div
+            {(modeTutor==2&&Object.keys(mine[2]).length>0) &&
+                    Object.entries(mine[2]).map(([student_id, tutees]) => (
+                            <Grid.Col
+                            span={{ base: 12, md: 4, lg: 3 }}
                                 key={student_id}
                                onClick={async () => {
                                     const posts = await Promise.all(
@@ -296,14 +295,11 @@ export default function TutorDash() {
                             >
                                 
                                 <ProfileCard imageSrc={urls[tutees[0].avatar_url]} name={tutees[0].name} classNames={tutees.map(tutoring => tutoring.className).join(', ')} cardType='Pending'/>
-                            </div>
-                ))}
-                </Group>
-                </Scroller>
-                </div>
+                            </Grid.Col>
+                ))
                 }
-                </div>
-            }
+                </Grid>
+                </div>}
              {mode==1 && <div>
                 {Object.keys(requests[0]).length>0 &&<div>
                     <Text c= 'dimmed' fz='4vh'>Private:</Text>

@@ -66,12 +66,6 @@ style={{position: 'relative'}}
   
 </div>
     </div>
-    <Card style ={{backgroundColor:'#eaeaeaff'}} >
-<Text>lirneo is a tutor management platform for schools and tutoring programs. It helps administrators request, assign, schedule, and manage tutoring sessions while coordinating information for tutors, students, and teachers. lirneo gives schools administrative oversight of their tutoring programs, making it easier to organize tutoring and support students.</Text>      <div style={{display:'flex',gap:'30px',justifyContent:'center', paddingTop:'20px',paddingTop:'20px'}}>
-        <Text component="a" href="https://www.lirneo.com/privacy.html" td="underline" c='dimmed'>Privacy Policy</Text>
-        <Text component="a" href="https://www.lirneo.com/terms.html" td="underline" c='dimmed'>Terms of Use</Text>
-      </div>
-    </Card>
     </ScrollArea>
   );
 }

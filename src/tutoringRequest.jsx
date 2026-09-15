@@ -57,31 +57,6 @@ const handleClick = async(classItem)=>{
   setClassId(classItem.id)
   setSearchItem(classItem.name)
 }
-
-const makeSupabaseReady=()=>{
-  let temp={'tutor_id': user.id}
-  for (const subject of mySubjects){
-    for (const val of subject.val){
-      temp={...temp, [val.subject.toLocaleLowerCase()]: val.sliderVal}
-    }
-  }
-  return temp
-}
-
-const addStudentInfo = async()=>{
-  const d = makeSupabaseReady()
-      const {data, error}=await supabase.from('tutors_classes_comfort').upsert(d)
-      return 
-}
-const addStudentClass = async(id,index,teacher)=>{
-        const {data,error}=await supabase.from('tutor_class').upsert({
-            tutor_id: user.id,
-            class_id:id,
-            years_ago: index,
-            teacher_name:teacher
-          }, {onConflict:'tutor_id,class_id'})
-          return
-}
 const handleInputChange = (e) => { 
     const searchTerm = e.target.value;
     setSearchItem(searchTerm)
@@ -107,10 +82,9 @@ const handleInputChange = (e) => {
     }
   }
   const sendEmails = async()=>{
-    //TODO activate emails
     const {data, error} = await supabase.from('profiles').select('').eq('role', 'admin')
     for (const admin of data){
-      //sendEmailRegister(admin.name, admin.email)
+      sendEmailRegister(admin.name, admin.email)
     }
     const t = teachers.find(teacher=> teacher.id==teacherId)
     //sendEmailRegister(t.name, t.email)

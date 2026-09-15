@@ -19,7 +19,6 @@ const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
       .select("*")
       .eq("id", user.id)
       .maybeSingle();
-
     if (error) {
       console.error("Error getting profile:", error);
       return null;

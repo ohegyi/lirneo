@@ -794,7 +794,6 @@ const addPeriod=async(start, end)=>{
             let f=frees
             setFrees([...f, x])
             
-            //TODO can't make events in blocked
         }else{
             let fIndex = frees.indexOf(x)
             x.backColor=value<=50?`rgba(255,${(value)*(255/50)},0,${(50-value)/50+0.5})`:`rgba(${(100-value)*(255/50)},255, 0,${(value-50)/100+0.5})`
@@ -893,8 +892,7 @@ const handleConfirmed=async(confirmReject)=>{
   sendStatusUpdate(confirmReject.tutorName, profile.name, 'accepted', confirmReject.tutorEmail)
 
   //send email to admin
-  //todo unlock
-  //sendAdmin(confirmReject.tutorName,confirmReject.className, confirmReject.teacherName, confirmReject.teacherEmail)
+  sendAdmin(confirmReject.tutorName,confirmReject.className, confirmReject.teacherName, confirmReject.teacherEmail)
 }
 const handleRejected=async(confirmReject)=>{
   //update stati

@@ -168,7 +168,7 @@ export default function TutorRequestNotifications() {
         }
     const getDataRequests=async(role1, teacher_id1)=>{
         let data1 = []
-        if (role1=='teacher'){
+        if (role1=='teacher' || role1.substring(0,4)=='head'){
             const { data } = await supabase.from('tutoring_requests').select(
             `
             id,
@@ -285,7 +285,7 @@ export default function TutorRequestNotifications() {
                                     </div>
 <div style={{display:'flex', justifyContent:'center',paddingTop:'4%', gap:'2px'}}>
             <Button variant={(mainMode == 0 )? "filled":"outline"} onClick={()=>{setMainMode(0)}}>Request for tutoring</Button>
-            <Button variant={(mainMode == 1 )? "filled":"outline"} onClick={()=>{setMainMode(1)}}>Requests to become a tutor </Button>
+            {profile.role!='teacher'&& <Button variant={(mainMode == 1 )? "filled":"outline"} onClick={()=>{setMainMode(1)}}>Requests to become a tutor </Button>}
             </div>
             <div style={{display: 'flex', justifyContent: 'center'}}>
             <div style={{width:'60vw', alignContent:'center'}}>
@@ -310,7 +310,7 @@ export default function TutorRequestNotifications() {
         </div>
         
             {mode ==0 && <div>
-                {(Object.keys(requests).length>0) && <div>
+                {(Object.keys(requests).length>0) && <div style={{padding:'20px'}}>
                  <Grid align="stretch" style={{width:'100%'}}>
                 {Object.entries(requests).map(([student_id, tutees]) => (
                             <Grid.Col key = {student_id} span={{ base: 12, md: 4, lg: 3 }} style={{
@@ -330,7 +330,7 @@ export default function TutorRequestNotifications() {
                 }
              </div>}
              {mode ==1 && <div>
-                {(Object.keys(pending[0]).length>0) && <div>
+                {(Object.keys(pending[0]).length>0) && <div style={{padding:'20px'}}>
                                  <Grid align="stretch" style={{width:'100%'}}>
                 {Object.entries(pending[0]).map(([student_id, tutees]) => (
                             <Grid.Col span={{ base: 12, md: 4, lg: 3 }} style={{
@@ -358,7 +358,7 @@ export default function TutorRequestNotifications() {
                 }
                 </div>}
                 {mode ==2 && <div>
-                {(Object.keys(pending[1]).length>0) && <div>
+                {(Object.keys(pending[1]).length>0) && <div style={{padding:'20px'}}>
                  <Grid align="stretch" style={{width:'100%'}}>
 
                 {Object.entries(pending[1]).map(([student_id, tutees]) => (
@@ -386,7 +386,7 @@ export default function TutorRequestNotifications() {
                 }
                 </div>}
                 {mode ==3 && <div>
-                {(Object.keys(confirmed).length>0) && <div>
+                {(Object.keys(confirmed).length>0) && <div style={{padding:'20px'}}>
                  <Grid align="stretch" style={{width:'100%'}}>
 
                 {Object.entries(confirmed).map(([student_id, tutees]) => (
@@ -416,7 +416,7 @@ export default function TutorRequestNotifications() {
                 </div>}
                     
     </div>}
-    {mainMode==1&&<div>
+    {(mainMode==1)&&<div>
         <SegmentedControl
       value={mode1}
       onChange={setMode1}
@@ -425,25 +425,34 @@ export default function TutorRequestNotifications() {
         { label: 'Updates', value: 1 }
       ]}
     />
+    <div style={{padding:'20px'}}>
+    <Grid align="stretch" style={{width:'90%'}}>
         {(tutorBeRequests.length>0 && mode1==0) && tutorBeRequests.map(item=>
-            (<ProfileCard key ={item.id} onPress={()=>{
+        <Grid.Col
+                                span={{ base: 12, md: 4, lg: 3 }}
+                                key ={item.id}>
+            <ProfileCard onPress={()=>{
                 navigate('/tutorSetup',{state:{
                     id:item.id,
                     name:item.name,
                     email:item.email,
                     editable:false
             }})
-            }}imageSrc={avsTutors[item.avatar_url]} name={item.name} cardType ='Active'/>))}
+            }}imageSrc={avsTutors[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
              {(tutorBeRequestsUpdated.length>0 && mode1==1) && tutorBeRequestsUpdated.map(item=>
-            (<ProfileCard key ={item.id} onPress={()=>{
+             <Grid.Col
+             key ={item.id}
+                                span={{ base: 12, md: 4, lg: 3 }}
+                                >
+            <ProfileCard key ={item.id} onPress={()=>{
                 navigate('/tutorSetup',{state:{
                     id:item.id,
                     name:item.name,
                     email:item.email,
                     editable:false
             }})
-            }}imageSrc={avsTutorsUpdated[item.avatar_url]} name={item.name} cardType ='Active'/>))}
-        </div>}
+            }}imageSrc={avsTutorsUpdated[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
+       </Grid></div></div>}
                 {infoShort && (
                     <Drawer position={'right'} offset={8} radius="md" opened = {infoShort} onClose={()=>{
                                         setInfoShort(false)

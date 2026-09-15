@@ -50,7 +50,7 @@ export default function MyProfile(){
                                         <Divider my="md" size="md"/>
                                         </div>
                                         <div style={{display:'flex',alignItems: 'flex-start', width: '100%'}}>
-                <Text c='dimmed'>{(profile.role=='tutorConfirmed' || profile.role=='tutorUpdated')?'tutor':profile.role=='tutor'?'student':profile.role}</Text>
+                <Text c='dimmed'>{(profile.role=='tutorConfirmed' || profile.role=='tutorUpdated')?'tutor':profile.role=='tutor'?'student':profile.role.substring(0,4)=='head'?'teacher':profile.role}</Text>
                 </div>
                                         
             </div>
@@ -63,7 +63,7 @@ export default function MyProfile(){
     alignItems: 'flex-start',
     width: '100%',
   }}>
-        <Text size='sm'>{profile.role=='student'?'Want to join the team?':(profile.role=='admin'|| profile.role=='teacher')?'One website,':'Changes?'}</Text>
+        <Text size='sm'>{profile.role=='student'?'Want to join the team?':(profile.role=='admin'|| profile.role.substring(0,4)=='head'||profile.role=='teacher')?'One website,':'Changes?'}</Text>
         </div>
         <div style={{
             paddingLeft:'7vw',
@@ -73,10 +73,9 @@ export default function MyProfile(){
   }}>
         <Text onClick={()=>{
                   if(profile.role=='student' || profile.role =='tutor' || profile.role=='tutorConfirmed' || profile.role=='tutorUpdated'){
-                    console.log('jhere')
                     navigate('/tutorSetup', {state:{id:profile.id, editable:true}})
                   }
-        }} size='10vh' fw={700} component="span" variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}>{profile.role=='student'?'Become a tutor':(profile.role=='admin'|| profile.role=='teacher')?'A lot of tutoring':'Update your tutoring profile'}</Text>
+        }} size='10vh' fw={700} component="span" variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}>{profile.role=='student'?'Become a tutor':(profile.role=='admin'|| profile.role=='teacher'|| profile.role.substring(0,4)=='head')?'A lot of tutoring':'Update your tutoring profile'}</Text>
                     </div>
                     </div>  
     <Marquee reverse pauseOnHover gap="lg" fadeEdgeSize="15%">
