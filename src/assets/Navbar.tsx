@@ -7,6 +7,7 @@ import {
   IconMessagePlus,
   IconLogout
 } from '@tabler/icons-react';
+import defaultImg from './default.jpg'
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import classes from './Navbar.module.css'
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -130,7 +131,7 @@ export function Navbar()  {
   return (
     <nav className={classes.navbar} style={{minHeight: '100vh'}}>
       <Center>
-        <img src={imageSrc} 
+        <img src={imageSrc ??defaultImg} 
         style={{
           aspectRatio: '1',
         width: '50px',

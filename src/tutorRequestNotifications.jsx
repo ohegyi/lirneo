@@ -11,6 +11,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
 import '@mantine/core/styles.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from './lib/useAuth';
+import defaultImg from './assets/default.jpg'
 import ClassCard from './assets/classCard';
 import ProfileCard from './assets/ProfileCard';
 const icon = <IconInfoCircle />
@@ -600,7 +601,7 @@ export default function TutorRequestNotifications() {
                                                     display:'flex',
                                                     }}>
                                                 <img
-                                                src={urls[request.profiles.avatar_url]}
+                                                src={urls[request.profiles.avatar_url]??defaultImg}
                                                 style={{
                                                     aspectRatio: '1',
                                                     width: '30px',

@@ -34,6 +34,7 @@ const router = createBrowserRouter([
         </div>
       </ProtectedRoute>
     ),
+    errorElement: <SignIn />,
     children: [
       {
         

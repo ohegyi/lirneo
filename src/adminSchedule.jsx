@@ -14,6 +14,7 @@ import { IconX ,IconChevronRight, IconChevronsUpLeft} from '@tabler/icons-react'
 import { TimePicker } from '@mantine/dates';
   import 'react-time-picker/dist/TimePicker.css';
 import { useAuth } from './lib/useAuth';
+import defaultImg from './assets/default.jpg'
 import { notifications } from '@mantine/notifications';
   const icon = <IconInfoCircle />
   export default function AdminSchedule() {
@@ -1051,7 +1052,7 @@ import { notifications } from '@mantine/notifications';
     .filter(u => activeUsers.every(a => a.id !== u.id))
     .map(user1 => (
         <div style={{display: 'flex',gap:'4px', alignContent:'center', justifyContent:'center'}} key={user1.id} onDoubleClick={() => handleDoubleClick()} onClick={() => {if(id!=user1.id){handleSingleClick(user1)}}}>
-        <img src={avatars[user1.avatar_url]}style={{
+        <img src={avatars[user1.avatar_url]??defaultImg}style={{
                                                     width: '30px',
                                                     height: '30px',
                                                     aspectRatio: '1',
@@ -1067,7 +1068,7 @@ import { notifications } from '@mantine/notifications';
           .filter(u => activeUsers.every(a => a.id !== u.id))
           .map(user1 => (
     <div style={{display: 'flex',gap:'4px', alignContent:'center', justifyContent:'center'}} key={user1.id} onDoubleClick={() => handleDoubleClick()} onClick={() => {if(id!=user1.id){handleSingleClick(user1)}}}>
-       <img src={avatars[user1.avatar_url]}style={{
+       <img src={avatars[user1.avatar_url]??defaultImg}style={{
                                                     width: '30px',
                                                     height: '30px',
                                                     aspectRatio: '1',

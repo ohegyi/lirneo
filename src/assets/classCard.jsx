@@ -10,6 +10,7 @@ import historyImg from './history.jpg'
 import latinImg from './latin.jpg'
 import mathImg from './math.jpg'
 import physicsImg from './physics.jpg'
+import defaultImg from './default.jpg'
 import spanishImg from './spanish.jpg'
 
 export default function ClassCard({className,subject,nature=false, avatar_url=false}) {
@@ -57,10 +58,10 @@ export default function ClassCard({className,subject,nature=false, avatar_url=fa
 </div>
         ))}
       <Card.Section  width='100%' padding="0" px="0" >
-        {avatar_url &&  <Box w='50cqw'truncate="end" style={{position:'absolute',
+        {true &&  <Box w='50cqw'truncate="end" style={{position:'absolute',
         bottom:'2%',
         left:'52%',display:'flex'}}>
-           {avatar_url &&  <img src={avatar_url}
+           {true &&  <img src={avatar_url??defaultImg}
             style={{
         width: '10cqw',
         height: '10cqw',

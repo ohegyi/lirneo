@@ -1,5 +1,6 @@
 import { Box, Card, Text,Group } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
+import defaultImg from './default.jpg'
 
 export default function ProfileCard({onPress, imageSrc,name,classNames, cardType, onDelete}) {
   let color = cardType=='Active'||cardType=='list'?{outline:'#cbcbcbff', text:'black', back:'white'}:cardType=='Pending'?{outline:'#6d6d6dff', text:'black', back:'#cbcbcbff'}:{outline:'#ff6c6cff', text:'#ff6c6cff', back:'#ffc0c0ff'}
@@ -8,7 +9,7 @@ export default function ProfileCard({onPress, imageSrc,name,classNames, cardType
       {cardType=='list'&&<IconX stroke={2} onClick={onDelete} style={{position:'absolute', top:'5px', right:'5px' }} />
 }
       <Group wrap="nowrap">
-        <img src={imageSrc} style={{
+        <img src={imageSrc??defaultImg} style={{
         width: '35cqw',
         aspectRatio: '1',
         borderRadius: '50%',

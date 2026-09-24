@@ -9,6 +9,7 @@ import frenchImg from './assets/french.jpg'
 import greekImg from './assets/greek.jpg'
 import historyImg from './assets/history.jpg'
 import latinImg from './assets/latin.jpg'
+import defaultImg from './assets/default.jpg'
 import mathImg from './assets/math.jpg'
 import physicsImg from './assets/physics.jpg'
 import spanishImg from './assets/spanish.jpg'
@@ -25,7 +26,7 @@ export default function MyProfile(){
   }}>
         <div style={{display:'flex', paddingTop:'10vh', paddingLeft:'2%'}}>
             <div style={{paddingRight:'2vw'}}>
-    <img src={profile.avatar_url} style={{
+    <img src={profile.avatar_url??defaultImg} style={{
             width: '10vw',
             height:'10vw',
             aspectRatio: '1',
