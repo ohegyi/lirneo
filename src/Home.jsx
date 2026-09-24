@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "./lib/supabase";
-import { Loader } from "@mantine/core";
+import { Button, Loader } from "@mantine/core";
 import { useAuth } from "./lib/useAuth";
 import VariableProximity from "./assets/VariableProximity";
+import SplitText from "./assets/SplitText";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
+  const navigate=useNavigate()
   const containerRef = useRef(null);
   const {profile}=useAuth()
   return (
@@ -32,6 +35,26 @@ style={{position: 'relative'}}
             style={{fontSize:'140px'}}
             falloff="linear"
           />
+          {profile.role=='student'&&<Button variant='white' onClick={()=>{
+      navigate('/tutorSetup', {state:{id:profile.id, editable:true}})
+      }}>
+    <div style={{color:'black',display:'flex', alignItems:'center',justifyContent:'center'}}>
+  <SplitText
+  text='Apply to be a tutor'
+  className="text-2xl font-semibold text-center"
+  delay={100}
+  duration={1}
+  ease="power3.out"
+  splitType="chars"
+  from={{ opacity: 0, y: 40 }}
+  to={{ opacity: 1, y: 0 }}
+  threshold={0.1}
+  rootMargin="-100px"
+  textAlign="center"
+  showCallback
+/>
+</div>
+</Button>}
                 </div>
                 </div>
                 </div>

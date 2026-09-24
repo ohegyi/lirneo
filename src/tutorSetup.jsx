@@ -115,8 +115,75 @@ export default function TutorSetup() {
     setLoad(true)
     if (id){
       setUser({'id':id, 'name':name})
-      await getDataComfort()
-      //await getDataUser(id)
+      if(profile.role=='admin'||profile.teacher_id!=null){
+        await getDataComfort()
+      }else{
+       getStudentClasses([
+  {subj:'Science',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Biology',sliderVal:0,backColor:'white'},
+    {subject:'Ecology',sliderVal:0,backColor:'white'},
+    {subject:'Chemistry',sliderVal:0,backColor:'white'},
+    {subject:'Physics',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'Math',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Algebra 1',sliderVal:0,backColor:'white'},
+    {subject:'Algebra 2',sliderVal:0,backColor:'white'},
+    {subject:'Geometry',sliderVal:0,backColor:'white'},
+    {subject:'Precalculus',sliderVal:0,backColor:'white'},
+    {subject:'Calculus',sliderVal:0,backColor:'white'},
+    {subject:'Statistics',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'English',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'English',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'History',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Foundations of Global History',sliderVal:0,backColor:'white'},
+    {subject:'Modern Global History',sliderVal:0,backColor:'white'},
+    {subject:'United States History',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'French',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'French 1',sliderVal:0,backColor:'white'},
+    {subject:'French 2',sliderVal:0,backColor:'white'},
+    {subject:'French 3',sliderVal:0,backColor:'white'},
+    {subject:'French 4',sliderVal:0,backColor:'white'},
+    {subject:'AP French',sliderVal:0,backColor:'white'},
+    {subject:'French 6',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'Spanish',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Spanish 1',sliderVal:0,backColor:'white'},
+    {subject:'Spanish 2',sliderVal:0,backColor:'white'},
+    {subject:'Spanish 3',sliderVal:0,backColor:'white'},
+    {subject:'Spanish 4',sliderVal:0,backColor:'white'},
+    {subject:'AP Spanish',sliderVal:0,backColor:'white'},
+    {subject:'Spanish 6',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'Chinese',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Chinese 1',sliderVal:0,backColor:'white'},
+    {subject:'Chinese 2',sliderVal:0,backColor:'white'},
+    {subject:'Chinese 3',sliderVal:0,backColor:'white'},
+    {subject:'Chinese 4',sliderVal:0,backColor:'white'},
+    {subject:'AP Chinese',sliderVal:0,backColor:'white'},
+    {subject:'Chinese 6',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'Latin',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Latin 1',sliderVal:0,backColor:'white'},
+    {subject:'Latin 2',sliderVal:0,backColor:'white'},
+    {subject:'Latin 3',sliderVal:0,backColor:'white'},
+    {subject:'Latin 4',sliderVal:0,backColor:'white'},
+    {subject:'AP Latin',sliderVal:0,backColor:'white'},
+    {subject:'Latin 5',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'Greek',sliderVal:0,pressed:false,classesTaken:[],val:[
+    {subject:'Greek 1',sliderVal:0,backColor:'white'},
+    {subject:'Greek 2',sliderVal:0,backColor:'white'},
+    {subject:'Greek 3',sliderVal:0,backColor:'white'}
+  ]},
+  {subj:'Computer Science',sliderVal:0,classesTaken:[],pressed:false,val:[
+    {subject:'AP Computer Science',sliderVal:0,backColor:'white'},
+    {subject:'Data Structures',sliderVal:0,backColor:'white'}
+  ]}
+])
+      }
     }else{
       const {profile} = useAuth()
       setUser(profile);
@@ -178,7 +245,6 @@ setAdded(prev =>
 }
 
 const makeSupabaseReady=()=>{
-  console.log('HERE',mySubjects)
   let temp={'tutor_id': user.id}
   for (const subject of mySubjects){
     for (const val of subject.val){
@@ -189,7 +255,6 @@ const makeSupabaseReady=()=>{
 }
 const addStudentInfo = async()=>{
   const d = makeSupabaseReady()
-  console.log(d)
       const {data, error}=await supabase.from('tutors_classes_comfort').upsert(d)
       for (const d of deleted){
         deleteStudentClass(d)
@@ -209,20 +274,22 @@ const addStudentClass = async(classid,index,teacher)=>{
           return
 }
 const handleUploadData=async()=>{
-  if (profile.role=='student'){
+  let t ='new'
+  navigate('/home')
+  if (profile.role=='student'||profile.role=='tutor'){
       await supabase.from('profiles').update({role: 'tutor'}).eq('id', user.id)
-  }else if(profile.role=='tutor'||profile.role=='tutorConfirmed'){
+  }else if(profile.role=='tutorConfirmed'||profile.role=='tutorUpdated'){
       await supabase.from('profiles').update({role: 'tutorUpdated'}).eq('id', user.id)
+      t='update'
   }
   await addStudentInfo()
+  console.log(added)
   for (let form=0; form<added.length; form++){
     for (const classItem of added[form]){
       await addStudentClass(classItem.id, form, classItem.teacherName)
     }
   }
-  navigate('/home')
-  console.log('HERE')
-  sendEmailsNewTutor()
+  sendEmailsNewTutor(t)
   notifications.show({
       title: 'Tutor Application Submitted',
   })
@@ -253,11 +320,10 @@ const handleInputChange = (e) => {
   setAdded(prev =>
     prev.map((class1, form) =>
       form === parseInt(curForm)
-        ? class1.map(item =>
+        ? class1.some(item=>item.id==classId)?
+        class1.map(item =>
             item.id === classId
-              ? { ...item, teacherName: e.target.value, teacherID: '',backColor:'white'}
-              : item
-          )
+              ? { ...item, teacherName: e.target.value}:item):[...class1,{id:classId, teacherName: e.target.value}]
         : class1
     )
   );
@@ -336,9 +402,8 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
 
 
   const getDataComfort=async()=>{
-    console.log('inside')
+    console.log('getDataComfort')
     const { data, error } = await supabase.from('tutors_classes_comfort').select().eq('tutor_id', id).maybeSingle()
-    console.log(data)
     if(data){
     const valtoSubj={
       'science':{subj:'Science',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Biology', sliderVal:parseInt(data.biology.split(' ')[0]), backColor:'white'},{subject: 'Ecology', sliderVal:parseInt(data.ecology.split(' ')[0]), backColor:'white'},{subject: 'Chemistry', sliderVal:parseInt(data.chemistry.split(' ')[0]), backColor:'white'},{subject: 'Physics', sliderVal:parseInt(data.physics.split(' ')[0]), backColor:'white'}]},
@@ -352,9 +417,14 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       'greek':{subj:'Greek',sliderVal:0,pressed:false,classesTaken:[],val:[{subject: 'Greek 1', sliderVal:parseInt(data['greek 1'].split(' ')[0]), backColor:'white'},{subject: 'Greek 2', sliderVal:parseInt(data['greek 2'].split(' ')[0]), backColor:'white'},{subject: 'Greek 3', sliderVal:parseInt(data['greek 3'].split(' ')[0]), backColor:'white'}]},
       'computer science':{subj:'Computer Science',sliderVal:0,classesTaken:[],pressed:false,val:[{subject: 'AP Computer Science', sliderVal:parseInt(data['ap computer science'].split(' ')[0]), backColor:'white'},{subject: 'Data Structures', sliderVal:parseInt(data['data structures'].split(' ')[0]), backColor:'white'}]}
     }
-      let isHead=profile.role.substring(0,4)=='head'
-      console.log(isHead)
-      let subjects=isHead?profile.role.split('|').slice(1):[]
+      let isHead=profile.teacher_id
+      let subjects=[]
+      if (isHead&&profile.role.substring(0,4)!='head'){
+        const {data} = await supabase.from('department_head_requests').select('subject').eq('tutor_id', id).eq('teacher_id',profile.teacher_id).maybeSingle()
+        subjects=[data.subject]
+      }else{
+        subjects=isHead?profile.role.split('|').slice(1):[]
+      }
     let t =isHead?[]:[
       valtoSubj['science'],
       valtoSubj['math'],
@@ -363,6 +433,9 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
     ]
     let f=[]
      if (parseInt(data['algebra 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('math')))){
+      if (isHead){
+        t=[...t, valtoSubj['math']]
+      }
       f.push({subj:'Math',classesTaken:[],sliderVal:data['algebra 1'].split(' ')[1],pressed:false})
       if (data['algebra 1'].split(' ')[1]==1){
         setReadyAdmin(false)
@@ -372,6 +445,9 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
     }
     if (parseInt(data['english'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('english')))){
       f.push({subj:'English',classesTaken:[],sliderVal:data['english'].split(' ')[1],pressed:false})
+      if (isHead){
+        t=[...t, valtoSubj['english']]
+      }
       if (data['english'].split(' ')[1]==1){
         setReadyAdmin(false)
       }
@@ -380,6 +456,9 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
     }
     if (parseInt(data['foundations of global history'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('history')))){
       f.push({subj:'History',classesTaken:[],sliderVal:data['foundations of global history'].split(' ')[1],pressed:false})
+      if (isHead){
+        t=[...t, valtoSubj['history']]
+      }
       if (data['foundations of global history'].split(' ')[1]==1){
         setReadyAdmin(false)
       }
@@ -387,7 +466,9 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       subjects.filter(item=>item=='history')
     }
     if (!isHead||(isHead&& subjects.includes('science'))){
+      let q = false
       if (parseInt(data.chemistry.split(' ')[0])!=0){
+        q=true
       f.push({subj:'Chemistry',classesTaken:[],sliderVal:data.chemistry.split(' ')[1],pressed:false})
       subjects.push('chemistry')
       if (data['chemistry'].split(' ')[1]==1){
@@ -395,6 +476,7 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       }
     }
     if (parseInt(data.physics.split(' ')[0])!=0){
+      q=true
       f.push({subj:'Physics',classesTaken:[],sliderVal:data.physics.split(' ')[1],pressed:false})
       subjects.push('physics')
       if (data['physics'].split(' ')[1]==1){
@@ -402,6 +484,7 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       }
     }
     if (parseInt(data.biology.split(' ')[0])!=0){
+      q=true
       f.push({subj:'Biology',classesTaken:[],sliderVal:data.biology.split(' ')[1],pressed:false})
       subjects.push('biology')
       if (data['biology'].split(' ')[1]==1){
@@ -409,12 +492,17 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       }
     }
     if (parseInt(data.ecology.split(' ')[0])!=0){
+      q=true
       f.push({subj:'Ecology',classesTaken:[],sliderVal:data.ecology.split(' ')[1],pressed:false})
       subjects.push('ecology')
       if (data['ecology'].split(' ')[1]==1){
         setReadyAdmin(false)
       }
-    }}
+    }
+    if(q && isHead){
+      console.log('added Science')
+      t=[...t, valtoSubj['science']]}
+  }
       subjects.filter(item=>item=='science')
     if (parseInt(data['french 1'].split(' ')[0])!=0&&(!isHead||(isHead&& subjects.includes('french')))){
       t=[...t, valtoSubj['french']]
@@ -456,7 +544,7 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       }
     }else{
       subjects.filter(item=>item=='greek')
-    }if (parseInt(data['ap computer science'].split(' ')[0])!=0 && parseInt(data['data sttructures'].split(' ')[0])!=0 &&(!isHead||(isHead&& subjects.includes('computer science')))){
+    }if (parseInt(data['ap computer science'].split(' ')[0])!=0 && parseInt(data['data structures'].split(' ')[0])!=0 &&(!isHead||(isHead&& subjects.includes('computer science')))){
       t=[...t, valtoSubj['computer science']]
       f.push({subj:'Computer Science',sliderVal:data['data structures'].split(' ')[1],pressed:false})
       if (data['data structures'].split(' ')[1]==1){
@@ -470,6 +558,66 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
     getStudentClasses(t)
 }
 }
+const getTeacherToEmail=async()=>{
+  //here
+  let nameEmails={}
+  let errorSubjects=[]
+  console.log(finishSubjects)
+  for (const subject of finishSubjects){
+    let q = false
+    outerLoop:for (let form =4; form>=0; form--){
+      if (myClasses[form].length!=0){
+        for (const class1 of myClasses[form]){
+          if (class1.subject==subject.subj.toLocaleLowerCase()){
+            const {data, error}=await supabase.from('teachers').select('email,id').eq('name',class1.teacherName).maybeSingle()
+            if (class1.teacherName){
+              q=true
+              nameEmails[class1.teacherName]=[data.email,data.teacher_id, subject.subj]
+            }
+            break outerLoop;
+          }
+        }
+      }
+    }
+    if (!q){
+        errorSubjects.push(subject.subj)
+      }
+}
+navigate('/home')
+notifications.show({
+    title:'Application updated'
+  })
+  console.log(errorSubjects, nameEmails)
+  const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
+    for (const subject of errorSubjects){
+      for (const admin1 of data){
+          sendEmailError(admin1.name,admin1.email, subject)
+        }
+    }
+for (const [name, info] of Object.entries(nameEmails)){
+    sendEmailHead(name, info[0])
+    await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:'new', subject:info[2]}
+    )}
+     await supabase.from('department_head_requests').delete().eq('tutor_id', id).eq('teacher_id',profile.teacher_id)
+
+
+  
+}
+const sendEmailError = (name1, email,subject) => {
+        const templateParams = {
+            name : name1,
+            email: email,
+            student:name,
+            subject:subject
+        };
+        emailjs.send(
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            'template_uly6q6q',
+            templateParams,
+            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+            )
+            .catch((error) => console.log(error));
+    };
 const getStudentClasses=async(x)=>{
     const {data,error}=await supabase.from('tutor_class').select(('Classes(*), years_ago, teacher_name')).eq('tutor_id',id)
     let t=[[],[],[],[],[]]
@@ -531,7 +679,7 @@ const getStudentClasses=async(x)=>{
     setMyClasses(t)
     return true
   }
-const sendEmailsNewTutor=async()=>{
+const sendEmailsNewTutor=async(t)=>{
   const subjToHead={
     'Science':'head|science',
     'Chemistry':'head|science',
@@ -554,21 +702,16 @@ const sendEmailsNewTutor=async()=>{
     'Computer Science':'head|math|computer science',
   }
   let nameEmails={}
-  console.log(mySubjects)
   for (const subj of mySubjects){
-    console.log(subj.subj, subj.sliderVal)
     if(subj.sliderVal!=0){
-      console.log(subj)
-      const {data}=await supabase.from('profiles').select('name,email').eq('role',subjToHead[subj.subj]).maybeSingle()
-      console.log(data, subjToHead[subj.subj])
-      nameEmails[data.name]=data.email
+      const {data}=await supabase.from('profiles').select('name,email,teacher_id').eq('role',subjToHead[subj.subj]).maybeSingle()
+      nameEmails[data.name]=[data.email,data.teacher_id]
     }
   }
   
-  for (const [name, email] of Object.entries(nameEmails)){
-    console.log(name, email)
-    sendEmailHead(name, email)
-  }
+  for (const [name, info] of Object.entries(nameEmails)){
+    sendEmailHead(name, info[0])
+    await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:t})}
   const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
         for (const admin1 of data){
           sendOrigAdmin(admin1.name,admin1.email)
@@ -595,16 +738,16 @@ const handleHeadUpdate=async()=>{
 
     'History':'foundations of global history',
   }
+  navigate('/home')
   for (const subj of finishSubjects){
     const {data} = await supabase.from('tutors_classes_comfort').select(`*`).eq('tutor_id', id).maybeSingle()
     const{error} = await supabase.from('tutors_classes_comfort').update({[subjtodb[subj.subj]]:`${data[subjtodb[subj.subj]].split(' ')[0]} ${subj.sliderVal==1?0:subj.sliderVal}`}).eq('tutor_id', id)
-    console.log(error)
   }
+  await supabase.from('department_head_requests').delete().eq('tutor_id', id).eq('teacher_id',profile.teacher_id)
   const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
         for (const admin1 of data){
           sendSubjectAdmin(admin1.name,admin1.email)
         }
-  navigate('/home')
   notifications.show({
     title:'Application updated'
   })
@@ -628,7 +771,7 @@ const sendSubjectAdmin=async(adminName, adminEmail)=>{
 const sendEmailHead=async(teacherName, teacherEmail)=>{
   const templateParams = {
                 email : teacherEmail,
-                name : profile.name,
+                name : name ?? profile.name,
                 teacher : teacherName,
             };
             emailjs.send(
@@ -711,7 +854,7 @@ return (
                     weight={700}
                     style={{ fontFamily: 'Greycliff CF, sans-serif'}}
                     >
-                    {editable?'Class Registration': 'Tutor Profile: '+name}
+                    {editable?'Class History': 'Tutor Profile: '+name}
                     </Text>
         {editable && <Button variant = 'light' style={{position:'absolute', bottom:'20px', right:'20px'}} onClick={handleFinished}>All set</Button>}
         {!editable && <Button variant = 'outline' onClick={()=>{setMenuUp(true)}} style={{position:'absolute', bottom:'20px', right:'20px'}}><IconChevronLeft stroke={2} /></Button>}
@@ -846,24 +989,35 @@ return (
           color={subject.sliderVal<=50?`rgba(255,${(subject.sliderVal)*(255/50)},0,${(50-subject.sliderVal)/50+0.5})`:`rgba(${(100-subject.sliderVal)*(255/50)},255, 0,${(subject.sliderVal-50)/100+0.5})`}
                 style={{width:'200px'}}
                 value={subject.sliderVal}
-                onChange={(newValue) => {if(profile.role.substring(0,4)=='head'){handleSliderChangeBig(newValue, subject.subj)}}}
+                onChange={(newValue) => {if(profile.teacher_id){handleSliderChangeBig(newValue, subject.subj)}}}
           />
         
         </div>
       ))}
       
-      {(profile.role.substring(0,4)!='head'&& readyAdmin)&&<div stle={{paddingBottom:'20px'}}>
+      {(!profile.teacher_id&& readyAdmin)&&<div stle={{paddingBottom:'20px'}}>
       <TextInput label={"Message to " +name} style={{height:'30px'}}value={message} onChange={(e) => setMessage(e.target.value)}/>
         </div>}
-      {(profile.role.substring(0,4)!='head'&& readyAdmin)&&
+      {(!profile.teacher_id&& readyAdmin)&&
       <div style={{display:'flex', gap:'10px',justifyContent:'flex-end', paddingTop:'50px'}}>
       <Button variant='light' onClick={handleUploadDataAdmin}>Approve</Button>
       <Button variant='light' color='red' onClick={handleRejectAdmin}>Reject</Button>
       </div>}
-      {profile.role.substring(0,4)=='head'&&
-      <div style={{position:'absolute', bottom:'10px', right:'10px'}}>
+      {profile.teacher_id&&
+      <div>
+      <div style={{position:'absolute', bottom:profile.role.substring(0,4)=='head'?'60px':'10px', right:'10px'}}>
       <Button variant='light' onClick={handleHeadUpdate}>Next<IconChevronRight stroke={2}/></Button>
+      </div>
+      {profile.role.substring(0,4)=='head'&&<div style={{position:'absolute', bottom:'10px', right:'10px'}}>
+        <Button variant='white' style={{color:'black',fontSize: '10px'}}onClick={()=>{
+          getTeacherToEmail()
+          
+        }}>I cannot attest to this student's ability to tutor. Push request to most recent teacher.</Button>
+  
       </div>}
+      </div>}
+
+      
       </div>
       </Drawer>
 
@@ -1011,11 +1165,11 @@ return (
         <Grid align="stretch" style={{width:'100%'}}>
         {myClasses[parseInt(curForm)]
   .map(o => (
-    <Grid.Col span={{ base: 12, md: 4, lg: 3 }} style={{
+    <Grid.Col span={{ base: 12, md: 4, lg: 3 }} key={o.id} style={{
   display: 'flex',
   justifyContent: 'center',
 }}>
-    {(profile.role.substring(0,4)!='head'||(profile.role.substring(0,4)=='head'&&subjectsMain.includes(o.subject)))&&<Card key = {o.id} miw = '200px' maw='250px' padding="0" style={{ miw:'250px', containerType: 'inline-size',width: '100%', aspectRatio: '16 / 9', backgroundColor:'white', color:'black', borderColor:'#cbcbcbff'}} withBorder orientation="horizontal">
+    {(!profile.teacher_id||(profile.teacher_id&&subjectsMain.includes(o.subject)))&&<Card key = {o.id} miw = '200px' maw='250px' padding="0" style={{ miw:'250px', containerType: 'inline-size',width: '100%', aspectRatio: '16 / 9', backgroundColor:'white', color:'black', borderColor:'#cbcbcbff'}} withBorder orientation="horizontal">
     <img src={images[o.subject]}
     style={{width:'100cqw', height:'auto', position:'absolute', bottom:'40%'}}
     />
@@ -1071,7 +1225,7 @@ return (
         onChange={(e)=>{
           if(editable){
             setCurClassId(o.id)
-          handleInputChangeTeacher(e, o.id)
+            handleInputChangeTeacher(e, o.id)
           }
       }}
         />

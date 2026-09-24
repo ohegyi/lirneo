@@ -76,7 +76,7 @@ export default function TutorInvite() {
     }
     return (
             <div>
-                <h1>Class Registering</h1>
+                <h1>Class History</h1>
                 <button onClick={submit}>Update</button>
                 
                 <div>

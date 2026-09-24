@@ -881,7 +881,7 @@ return (
                                                             </div>
                                         </div>
                                         <div style={{paddingBottom:'10px'}}>
-                                      <Text fz='small' c='dimmed'>We some unaccounted-for time in your schedule, and we're paritioning it out for you now. Give us one second...</Text>
+                                      <Text fz='small' c='dimmed'>We some unaccounted-for time in your schedule, and we're partitioning it out for you now. Give us one second...</Text>
                                         </div>
 
                                     <div>

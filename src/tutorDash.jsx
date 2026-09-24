@@ -13,6 +13,7 @@ export default function TutorDash() {
     const user = profile
     const [mode,setMode]=useState(0)
     const [modeTutor, setModeTutor]=useState(0)
+    const [modeTutorNew, setModeTutorNew]=useState(0)
     const datesDays={'22':'Monday,', '23':'Tuesday,','24':'Wednesday,','25':'Thursday,','26':'Friday,','27':'Saturday,','28':'Sunday,'}
     const datesTimes={
         '00':['12', 'am'],
@@ -220,7 +221,9 @@ export default function TutorDash() {
                     </div>
                     </div>
             <div>
-                 <SegmentedControl
+                 
+            {mode==0 &&
+            <div><SegmentedControl
                       value={modeTutor}
                       onChange={setModeTutor}
                       data={[
@@ -229,7 +232,6 @@ export default function TutorDash() {
                         { label: 'Pending', value: 2 },
                       ]}
                     />
-            {mode==0 &&
             <div style={{padding:'20px'}}>
                 <Grid align="stretch" style={{width:'90%'}}>
                 {(modeTutor==0&&Object.keys(mine[0]).length>0) &&
@@ -299,31 +301,35 @@ export default function TutorDash() {
                 ))
                 }
                 </Grid>
-                </div>}
-             {mode==1 && <div>
-                {Object.keys(requests[0]).length>0 &&<div>
-                    <Text c= 'dimmed' fz='4vh'>Private:</Text>
-                    <Scroller draggable>
-                        <Group gap="xs" wrap="nowrap">
+                </div></div>}
+             {mode==1 && <div><SegmentedControl
+                      value={modeTutorNew}
+                      onChange={setModeTutorNew}
+                      data={[
+                        { label: 'Private', value: 0 },
+                        { label: 'Public', value: 1 },
+                      ]}
+                    />
+                    <div style={{padding:'20px'}}>
+                <Grid align="stretch" style={{width:'90%'}}>
+                {(modeTutorNew==0&&Object.keys(requests[0]).length>0) &&<div>
+            
                {Object.entries(requests[0]).map(([student_id, tutees]) => (
-                            <div
+                            <Grid.Col
+                            span={{ base: 12, md: 4, lg: 3 }}
                                 key={student_id}
                                 onClick={() => setInfoShort(tutees)}
                             >
                                 <ClassCard className={tutees.map(tutoring => tutoring.className).join(', ')} subject={tutees.map(tutoring => tutoring.subject).join('|')} nature='private'/>
                                 
-                            </div>
+                            </Grid.Col>
                 ))}
-                </Group>
-                </Scroller>
                 </div>
             }
-            {Object.keys(requests[1]).length>0&&<div>
-                    <Text c= 'dimmed' fz='4vh'>Public:</Text>
-                    <Scroller draggable>
-                        <Group gap="xs" wrap="nowrap">
+            {(modeTutorNew==1&&Object.keys(requests[1]).length>0)&&<div>
                {Object.entries(requests[1]).map(([student_id, tutees]) => (
-                            <div
+                            <Grid.Col
+                            span={{ base: 12, md: 4, lg: 3 }}
                                 key={student_id}
                                 onClick={() => setInfoShort(tutees)}
                                 style={{
@@ -334,13 +340,12 @@ export default function TutorDash() {
                             >
                                 
                                 {tutees.map(tutoring => tutoring.className).join(', ')}
-                            </div>
+                            </Grid.Col>
                 ))}
-                </Group>
-                </Scroller>
                 </div>
                 
             }
+            </Grid></div>
             </div>
             }
             </div>

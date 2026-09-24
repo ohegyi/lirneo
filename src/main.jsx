@@ -36,6 +36,7 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        
     path: "/home",
     element: <Home />,
   },
@@ -45,11 +46,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/tutorRequestNotifications",
-    element: <TutorRequestNotifications />,
+    element: <ProtectedRoute allowedRoles={["admin", 'teacher', 'head|latin|greek', 'head|science', 'head|french|spanish|chinese', 'head|history', 'head|english','head|math|computer science']}>
+      <TutorRequestNotifications />
+      </ProtectedRoute>,
   },
   {
     path:'/studentDash',
-    element: <StudentDash/>
+        element: <ProtectedRoute allowedRoles={["tutorConfirmed", 'tutorUpdated']}>
+      <StudentDash />
+      </ProtectedRoute>,
   },
   {
     path: "/newCalendar",
