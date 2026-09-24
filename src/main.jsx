@@ -52,9 +52,8 @@ const router = createBrowserRouter([
   },
   {
     path:'/studentDash',
-        element: <ProtectedRoute allowedRoles={["tutorConfirmed", 'tutorUpdated']}>
+        element:
       <StudentDash />
-      </ProtectedRoute>,
   },
   {
     path: "/newCalendar",
