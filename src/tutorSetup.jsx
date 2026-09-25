@@ -587,7 +587,6 @@ navigate('/home')
 notifications.show({
     title:'Application updated'
   })
-  console.log(errorSubjects, nameEmails)
   const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
     for (const subject of errorSubjects){
       for (const admin1 of data){
@@ -704,11 +703,13 @@ const sendEmailsNewTutor=async(t)=>{
   let nameEmails={}
   for (const subj of mySubjects){
     if(subj.sliderVal!=0){
-      const {data}=await supabase.from('profiles').select('name,email,teacher_id').eq('role',subjToHead[subj.subj]).maybeSingle()
-      nameEmails[data.name]=[data.email,data.teacher_id]
+      const {data}=await supabase.from('profiles').select('name,email,teacher_id').eq('role',subjToHead[subj.subj])
+      for (const t of data){
+        nameEmails[t.name]=[t.email,t.teacher_id]
+      }
     }
   }
-  
+  console.log(nameEmails)
   for (const [name, info] of Object.entries(nameEmails)){
     sendEmailHead(name, info[0])
     await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:t})}
