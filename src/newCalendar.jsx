@@ -724,22 +724,25 @@ const addPeriod=async(start, end)=>{
     }
     else{
       let x = eventsOfficial.find(item =>item.id==args.e.data.id)
-
+      console.log(x.backColor)
     if(x.backColor=='#f5f5f5'&&value!=0){
+      console.log(1)
       setFrees([...frees, x])
       console.log(x)
       x.title=x.borderColor
       x.backColor=value<=50?`rgba(255,${(value)*(255/50)},0,${(50-value)/50+0.5})`:`rgba(${(100-value)*(255/50)},255, 0,${(value-50)/100+0.5})`
       x.borderColor='transparent'
-    }else if(value!=0){
+    }else if(value!=0&&x.backColor!='white'){
+      console.log(2)
       setFrees([...frees, x])
-      console.log(x)
       x.title=x.borderColor
       x.backColor='white'
       x.borderColor='transparent'
     } else if (!fourth && x.backColor!='#94949461'){
+      console.log(3)
       setFrees(frees.splice(frees.indexOf(frees.find(item =>item.id==args.e.data.id))),1)
       x.backColor=x.title
+      x.borderColor=x.title
       x.title=''
     }
 
