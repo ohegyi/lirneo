@@ -136,7 +136,8 @@ export default function TutorRequestNotifications() {
             if(data){
                 let avs=data.map(item=>item.avatar_url)
             setAvsTutors(await getAvatarUrl(avs))
-            setTutorBeRequests(data)
+            console.log(data)
+            setTutorBeRequests(...new Map(data.map(item => [item.id, item])).values())
             }
         }else{
             const { data, error } = await supabase.from('department_head_requests').select('profiles!department_head_requests_tutor_id_fkey(avatar_url, name,email,id)').eq('teacher_id',profile.teacher_id).eq('typeRequest', 'new')
@@ -144,7 +145,8 @@ export default function TutorRequestNotifications() {
                 let avs=data.map(item=>item.profiles.avatar_url)
                 let d = data.map(item=>item.profiles)
             setAvsTutors(await getAvatarUrl(avs))
-            setTutorBeRequests(d)
+            console.log([...new Map(d.map(item => [item.id, item])).values()])
+            setTutorBeRequests([...new Map(d.map(item => [item.id, item])).values()])
             }
         }
     }
