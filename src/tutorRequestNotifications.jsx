@@ -136,8 +136,7 @@ export default function TutorRequestNotifications() {
             if(data){
                 let avs=data.map(item=>item.avatar_url)
             setAvsTutors(await getAvatarUrl(avs))
-            console.log(data)
-            setTutorBeRequests(...new Map(data.map(item => [item.id, item])).values())
+            setTutorBeRequests(data)
             }
         }else{
             const { data, error } = await supabase.from('department_head_requests').select('profiles!department_head_requests_tutor_id_fkey(avatar_url, name,email,id)').eq('teacher_id',profile.teacher_id).eq('typeRequest', 'new')
