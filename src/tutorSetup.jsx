@@ -800,7 +800,7 @@ const sendOrigAdmin=async(adminName, adminEmail)=>{
 const sendAdminEmail=async(action)=>{
         const templateParams = {
                 name : name,
-                action: action,
+                action:'approved'?'We are pleased to extend you a position as a tutor.':'Unfortunately, at this time, we are not able to extend you a position.',
                 email: email,
                 note: message?'A note from '+ profile.name+": "+message:''
             };

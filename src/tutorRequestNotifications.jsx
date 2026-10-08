@@ -1,13 +1,13 @@
 import './index.css'
 import { useState, useEffect } from 'react'
-import { Button, Divider, Drawer, Grid, Group, Input, Notification, Scroller, SegmentedControl, Text, TextInput } from '@mantine/core';
+import { Button, Divider, Drawer, Grid, Group, Input, Loader, Notification, Scroller, SegmentedControl, Text, TextInput } from '@mantine/core';
 import { Notifications, notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import { supabase } from './lib/supabase'
 import emailjs from '@emailjs/browser';
 import './index.css'
 import { useNavigate } from 'react-router-dom';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { IconBoxModel2Off, IconInfoCircle } from '@tabler/icons-react';
 import '@mantine/core/styles.css';
 import { Link } from 'react-router-dom';
 import { useAuth } from './lib/useAuth';
@@ -19,6 +19,7 @@ export default function TutorRequestNotifications() {
     const navigate = useNavigate();
     const [users, setUsers] = useState([])
     const [requests, setRequests] = useState({})
+    const[finishedApps, setFinishedApps]=useState([])
     const [tutorBeRequests, setTutorBeRequests] = useState([])
     const [avsTutors, setAvsTutors]=useState({})
     const [mode1, setMode1]=useState(0)
@@ -77,9 +78,10 @@ export default function TutorRequestNotifications() {
                 setRole(profile.role)
                 getDataRequests(profile.role,profile.teacher_id)
                 getData()
-                getTutorApplications()
+                await getTutorApplications()
                 getUpdatedTutorApplications()
                 getAllTutors()
+        setLoad(false)
         };
         getUser();
         
@@ -129,6 +131,10 @@ export default function TutorRequestNotifications() {
             })
             .catch((error) => console.log(error));
     };
+    const getDeptHeadsInfo=async(id)=>{
+        const {data}=await supabase.from('department_head_requests').select('id').eq('tutor_id',id)
+        return data
+    }
     const getTutorApplications=async()=>{
         //        // navigate('/tutorSetup', {state:{id:request.id, editable:false, name: request.name, target:target}})
         if(profile.role=='admin'){
@@ -136,7 +142,19 @@ export default function TutorRequestNotifications() {
             if(data){
                 let avs=data.map(item=>item.avatar_url)
             setAvsTutors(await getAvatarUrl(avs))
-            setTutorBeRequests(data)
+            let a = []
+            let b = []
+            for (const item of data){
+                const x = await getDeptHeadsInfo(item.id)
+                console.log(x)
+                if (x.length!=0){
+                    a.push(item)
+                }else{
+                    b.push(item)
+                }
+            }
+            setTutorBeRequests(a)
+            setFinishedApps(b)
             }
         }else{
             const { data, error } = await supabase.from('department_head_requests').select('profiles!department_head_requests_tutor_id_fkey(avatar_url, name,email,id)').eq('teacher_id',profile.teacher_id).eq('typeRequest', 'new')
@@ -148,6 +166,7 @@ export default function TutorRequestNotifications() {
             setTutorBeRequests([...new Map(d.map(item => [item.id, item])).values()])
             }
         }
+        return true
     }
     const getAllTutors=async()=>{
     const {data}=await supabase.from('profiles').select('avatar_url, name,email,id').eq('role','tutorConfirmed')
@@ -288,7 +307,6 @@ export default function TutorRequestNotifications() {
         const {data, error} = await supabase.from('tutor_match_invites').select('*, profiles(name, email, id, avatar_url), tutoring_requests(updated_at)').eq('request_id',id )
         let urlList = await getAvatarUrl(data.map(item=>item.profiles.avatar_url))
         setUrls(urlList)
-        setLoad(false)
         return data
     }
     const getData=async()=>{
@@ -297,7 +315,6 @@ export default function TutorRequestNotifications() {
         if (data) {
             setUsers(data)
         }
-        setLoad(false)
     }
     return (
             <div>
@@ -317,6 +334,7 @@ export default function TutorRequestNotifications() {
 <div style={{display:'flex', justifyContent:'center',paddingTop:'4%', gap:'2px'}}>
             <Button variant={(mainMode == 0 )? "filled":"outline"} onClick={()=>{setMainMode(0)}}>Request for tutoring</Button>
              <Button variant={(mainMode == 1 )? "filled":"outline"} onClick={()=>{setMainMode(1)}}>Requests to become a tutor </Button>
+             {profile.role=='admin'&&<Button variant={(mainMode == 2 )? "filled":"outline"} onClick={()=>{setMainMode(2)}}>Finished Tutor Applications </Button>}
             </div>
             <div style={{display: 'flex', justifyContent: 'center'}}>
             <div style={{width:'60vw', alignContent:'center'}}>
@@ -497,6 +515,47 @@ export default function TutorRequestNotifications() {
             }})
             }}imageSrc={avsTutorsReal[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
        </Grid></div></div>}
+       {(mainMode==2)&&<div>
+    <div style={{padding:'20px'}}>
+    <Grid align="stretch" style={{width:'90%'}}>
+        {(finishedApps.length>0 && mode1==0) && finishedApps.map(item=>
+        <Grid.Col
+                                span={{ base: 12, md: 4, lg: 3 }}
+                                key ={item.id}>
+            <ProfileCard onPress={()=>{
+                navigate('/tutorSetup',{state:{
+                    id:item.id,
+                    name:item.name,
+                    email:item.email,
+                    editable:false
+            }})
+            }}imageSrc={avsTutors[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
+             {(tutorBeRequestsUpdated.length>0 && mode1==1) && tutorBeRequestsUpdated.map(item=>
+             <Grid.Col
+             key ={item.id}
+                                span={{ base: 12, md: 4, lg: 3 }}
+                                >
+            <ProfileCard key ={item.id} onPress={()=>{
+                navigate('/tutorSetup',{state:{
+                    id:item.id,
+                    name:item.name,
+                    email:item.email,
+                    editable:false
+            }})
+            }}imageSrc={avsTutorsUpdated[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
+            {(tutorsReal.length>0 && mode1==2) && tutorsReal.map(item=>
+        <Grid.Col
+                                span={{ base: 12, md: 4, lg: 3 }}
+                                key ={item.id}>
+            <ProfileCard onPress={()=>{
+                navigate('/tutorSetup',{state:{
+                    id:item.id,
+                    name:item.name,
+                    email:item.email,
+                    editable:false
+            }})
+            }}imageSrc={avsTutorsReal[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
+       </Grid></div></div>}
                 {infoShort && (
                     <Drawer position={'right'} offset={8} radius="md" opened = {infoShort} onClose={()=>{
                                         setInfoShort(false)
@@ -556,6 +615,9 @@ export default function TutorRequestNotifications() {
                         </Drawer>
                     )
                 }
+                {load && (
+                           <div className="modal-overlay1"><Loader/></div>
+                          )}
                 {infoPost && (
                    <Drawer position={'right'} offset={8} radius="md" opened = {infoPost} onClose={()=>{
                                         setInfoPost(false)
