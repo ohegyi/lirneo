@@ -56,7 +56,6 @@ import { notifications } from '@mantine/notifications';
     const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchItem.toLowerCase()) || user.name.toLowerCase().includes(searchItem.toLowerCase()))
     const[showError,setShowError]=useState(false)
-    console.log(users)
     const [resize, setResize] = useState(false)
     const [warning, setWarning] = useState(false)
     const [load, setLoad] = useState(true)
@@ -143,7 +142,6 @@ import { notifications } from '@mantine/notifications';
     let newPreviews = []
     let newAvOr = []
     let newBrOr = []
-    console.log(previewsUse[indexCur])
     if (previewsUse[indexCur].day && previewsUse[indexCur].start && previewsUse[indexCur].end){
       let t = false
       let st = new DayPilot.Date(previewsUse[indexCur].day+previewsUse[indexCur].start+':00')
@@ -257,7 +255,6 @@ import { notifications } from '@mantine/notifications';
           }
       }
       setAvatars(await getAvatarUrl(avs))
-      console.log(r)
       setRecomended(r)
       setUsers(allUsers)
       return true
@@ -413,7 +410,6 @@ import { notifications } from '@mantine/notifications';
             let curBr = br
             for (let i = 0;i<a.length;i++){
               setCurID(i)
-              console.log(1)
               results = previewFullHandling(a,i,av,br)
               curAv= results[1]
               curBr= results[2]
@@ -421,7 +417,6 @@ import { notifications } from '@mantine/notifications';
             let cur = adjustableTutorings
             for (let i = 0;i<cur.length;i++){
               setCurID(i)
-              console.log(2)
               cur = previewFullHandling(cur,i,curAv,curBr)[0]
             }
             if (adjustableTutorings.length>0){
@@ -444,7 +439,6 @@ import { notifications } from '@mantine/notifications';
   const handleClickPeriod=async(id)=>{
     if (!admin){
       let x = eventsOfficial.find(item =>item.id==id)
-      console.log(3)
       previewFullHandling(previews.map((item,index)=> index==curIndex?{...item, start:x.start.substring(11,16), end:x.end.substring(11,16), confirmed:null,day:x.start.substring(0,11)}:item))
     }
   }
@@ -856,7 +850,6 @@ import { notifications } from '@mantine/notifications';
                   if(previewsOrig.length>0 && previewsOrig!=previews){
                   setWarning(true)
                 }else{
-                  console.log('HERE')
                   setEmailPrep(true)
                 }
                 }else{
@@ -901,7 +894,6 @@ import { notifications } from '@mantine/notifications';
                         <div style = {{paddingTop:'20px'}} onClick={()=>{
               if (previews.length>1){
                 setCurIndex(0)
-                console.log(5)
                 let q = previewFullHandling(previews.filter((_,index1)=> index1!=index), 0)
                 if (q[0].length==0){
                   setPreviews(prev=>prev.filter((_,index1)=> index1!=index))
@@ -913,13 +905,11 @@ import { notifications } from '@mantine/notifications';
           
           }}>
         <TimePicker label='Start:' style={{width:'110px'}} format="12h" value={previews[index].start} onChange={(event)=>{
-          console.log(6)
           previewFullHandling(previews.map((item,index)=> index==curIndex?{...item, start:event}:item))
         }}/>
         </div>
         <div style={{width:'35%'}}>
         <TimePicker label='End:'style={{width:'110px'}} format="12h" value={previews[index].end} onChange={(event)=>{
-          console.log(7)
           previewFullHandling(previews.map((item,index)=> index==curIndex?{...item, start:event}:item))
         }}/>
         </div>

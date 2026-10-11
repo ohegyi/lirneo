@@ -114,15 +114,12 @@ export default function TutorDash() {
         setUrls(await getAvatarUrl(tUrls))
     }
     const getTutorInfo = async(request_id)=>{
-        console.log('here')
-        console.log('INSIDE', request_id)
         const {data, error} = await supabase.from('tutor_match').select(`
             request_id,
             profiles!tutor_match_tutor_id_fkey(id, name, email),
             periods(start)
             `).eq('request_id',request_id)
         let t = {}
-        console.log(data)
         if (data){
             t = {
                 request_id: request_id,
@@ -247,7 +244,6 @@ export default function TutorDash() {
                                             extra: await getTutorInfo(t.request_id)
                                         }))
                                     )
-                                    console.log(posts)
                                     setInfo(posts)
                                 }}
                                 
@@ -270,7 +266,6 @@ export default function TutorDash() {
                                             extra: await getTutorInfo(t.request_id)
                                         }))
                                     )
-                                    console.log(posts)
                                     setInfo(posts)
                                 }}
                             >

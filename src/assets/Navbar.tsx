@@ -56,6 +56,12 @@ const mockdata = {
   { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
+'tutorApp':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/tutorDash' },
+  { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
 'tutorConfirmed':[
   { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/tutorDash' },
@@ -109,7 +115,7 @@ const mockdata = {
 
 
 
-type Role = 'student' | 'tutor' | 'tutorUpdated'|'tutorConfirmed' | 'admin' | 'teacher' | 'head|latin|greek' | 'head|science' | 'head|french|spanish|chinese' | 'head|history' | 'head|english' | 'head|math|computer science';
+type Role = 'student' | 'tutor' | 'tutorUpdated'|'tutorConfirmed' |'tutorApp' | 'admin' | 'teacher' | 'head|latin|greek' | 'head|science' | 'head|french|spanish|chinese' | 'head|history' | 'head|english' | 'head|math|computer science';
 //type Icon = 'IconCalendarTime' | 'IconHome2' | 'IconCategory' | 'IconSettings' | 'IconUser' |'IconMessagePlus' | 'IconLogout'
 export function Navbar()  {
 

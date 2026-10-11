@@ -170,28 +170,6 @@ const handleClick = async(classItem)=>{
 )
   setSearchItem('')
 }
-const makeSupabaseReady=()=>{
-  let temp={'tutor_id': user.id}
-  for (const subject of mySubjects){
-    for (const val of subject.val){
-      temp={...temp, [val.subject.toLocaleLowerCase()]: val.sliderVal}
-    }
-  }
-  return temp
-}
-const addStudentInfo = async()=>{
-  const d = makeSupabaseReady()
-  await supabase.from('tutors_classes_comfort').upsert(d)
-  return 
-}
-const addStudentClass = async(id,index)=>{
-        const {data,error}=await supabase.from('tutor_class').upsert({
-            tutor_id: user.id,
-            class_id:id,
-            years_ago: index
-          }, {onConflict:'tutor_id,class_id'})
-          return
-}
 const handleUploadData=async()=>{
   let t={tutor_id: id}
   for (const sub of finishSubjects){

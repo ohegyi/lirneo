@@ -51,8 +51,10 @@ export default function TutorSetup() {
   const id = state?.id;
   const name = state?.name;
   const email=state?.email
+  const done=state?.done
   const target = state?.target ?? null
   const editable = state?.editable ?? true
+  const isRequest= state?.isRequest??true
   
   const [mySubjects, setMySubjects] = useState([
       {subj:'Science',sliderVal:0,backColor:'white',pressed:false,val:[{subject: 'Biology', sliderVal:0, backColor:'white'},{subject: 'Ecology', sliderVal:0, backColor:'white'},{subject: 'Chemistry', sliderVal:0, backColor:'white'},{subject: 'Physics', sliderVal:0, backColor:'white'}]},
@@ -198,7 +200,12 @@ export default function TutorSetup() {
 
   getUser();
 }, []);
-
+const getFinished=async(id)=>{
+        const {data}=await supabase.from('department_head_requests').select('*').eq('tutor_id',id)
+        if(data.length==1||(data.length==2&&((data[0].teacher_id=='86fd8531-315d-44b5-a29a-b3b6e92274a6'&&data[1].teacher_id=='d04d6495-2074-490c-b1ee-dd6e0889525b')||(data[1].teacher_id=='86fd8531-315d-44b5-a29a-b3b6e92274a6'&&data[0].teacher_id=='d04d6495-2074-490c-b1ee-dd6e0889525b')))){
+          await supabase.from('profiles').update({role:'tutorApp'}).eq('id', id)
+        }
+    }
 const getClasses=async()=>{
     const {data,error}=await supabase.from('Classes').select()
     let t=[]
@@ -283,7 +290,6 @@ const handleUploadData=async()=>{
       t='update'
   }
   await addStudentInfo()
-  console.log(added)
   for (let form=0; form<added.length; form++){
     for (const classItem of added[form]){
       await addStudentClass(classItem.id, form, classItem.teacherName)
@@ -402,7 +408,6 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
 
 
   const getDataComfort=async()=>{
-    console.log('getDataComfort')
     const { data, error } = await supabase.from('tutors_classes_comfort').select().eq('tutor_id', id).maybeSingle()
     if(data){
     const valtoSubj={
@@ -420,8 +425,8 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       let isHead=profile.teacher_id
       let subjects=[]
       if (isHead&&profile.role.substring(0,4)!='head'){
-        const {data} = await supabase.from('department_head_requests').select('subject').eq('tutor_id', id).eq('teacher_id',profile.teacher_id).maybeSingle()
-        subjects=[data.subject]
+        const {data} = await supabase.from('department_head_requests').select('*').eq('tutor_id', id).eq('teacher_id',profile.teacher_id)
+        subjects=[data[0].subject.toLocaleLowerCase()]
       }else{
         subjects=isHead?profile.role.split('|').slice(1):[]
       }
@@ -500,7 +505,6 @@ const handleSliderChange=(newValue, bigName, littleName)=>{
       }
     }
     if(q && isHead){
-      console.log('added Science')
       t=[...t, valtoSubj['science']]}
   }
       subjects.filter(item=>item=='science')
@@ -562,7 +566,6 @@ const getTeacherToEmail=async()=>{
   //here
   let nameEmails={}
   let errorSubjects=[]
-  console.log(finishSubjects)
   for (const subject of finishSubjects){
     let q = false
     outerLoop:for (let form =4; form>=0; form--){
@@ -572,7 +575,7 @@ const getTeacherToEmail=async()=>{
             const {data, error}=await supabase.from('teachers').select('email,id').eq('name',class1.teacherName).maybeSingle()
             if (class1.teacherName){
               q=true
-              nameEmails[class1.teacherName]=[data.email,data.teacher_id, subject.subj]
+              nameEmails[class1.teacherName]=[data.email,data.id, subject.subj]
             }
             break outerLoop;
           }
@@ -583,7 +586,7 @@ const getTeacherToEmail=async()=>{
         errorSubjects.push(subject.subj)
       }
 }
-navigate('/home')
+navigate('/tutorRequestNotifications', {state:{startMainMode:1, done:[...done, id]}})
 notifications.show({
     title:'Application updated'
   })
@@ -595,9 +598,10 @@ notifications.show({
     }
 for (const [name, info] of Object.entries(nameEmails)){
     sendEmailHead(name, info[0])
-    await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:'new', subject:info[2]}
-    )}
-     await supabase.from('department_head_requests').delete().eq('tutor_id', id).eq('teacher_id',profile.teacher_id)
+    const{error}=await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:'new', subject:info[2]}
+    )
+  }
+     //await supabase.from('department_head_requests').delete().eq('tutor_id', id).eq('teacher_id',profile.teacher_id)
 
 
   
@@ -709,14 +713,46 @@ const sendEmailsNewTutor=async(t)=>{
       }
     }
   }
-  console.log(nameEmails)
   for (const [name, info] of Object.entries(nameEmails)){
     sendEmailHead(name, info[0])
-    await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:t})}
+    await supabase.from('department_head_requests').upsert({teacher_id:info[1], tutor_id:id, typeRequest:t})
+  }
   const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
         for (const admin1 of data){
           sendOrigAdmin(admin1.name,admin1.email)
         }
+}
+const handleHeadUpdateAdmin=async()=>{
+  const subjtodb={
+    'Chemistry':'chemistry',
+    'Biology':'biology',
+    'Physics':'physics',
+    'Ecology':'ecology',
+
+    'French':'french 1',
+    'Spanish':'spanish 1',
+    'Chinese':'chinese 1',
+
+    'Latin':'latin 1',
+    'Greek':'greek 1',
+
+    'Math':'algebra 1',
+    'Computer Science':'data structures',
+
+    'English':'english',
+
+    'History':'foundations of global history',
+  }
+  navigate('/tutorRequestNotifications', {state:{startMainMode:1, done:[...done, id]}})
+  //here
+  for (const subj of finishSubjects){
+    const {data} = await supabase.from('tutors_classes_comfort').select(`*`).eq('tutor_id', id).maybeSingle()
+    await supabase.from('tutors_classes_comfort').update({[subjtodb[subj.subj]]:`${data[subjtodb[subj.subj]].split(' ')[0]} ${subj.sliderVal==1?0:subj.sliderVal}`}).eq('tutor_id', id)
+  }
+  notifications.show({
+    title:'Application updated'
+  })
+
 }
 const handleHeadUpdate=async()=>{
   const subjtodb={
@@ -739,10 +775,12 @@ const handleHeadUpdate=async()=>{
 
     'History':'foundations of global history',
   }
-  navigate('/home')
+  navigate('/tutorRequestNotifications', {state:{startMainMode:1, done:[...done, id]}})
+  //here
+  getFinished(id)
   for (const subj of finishSubjects){
     const {data} = await supabase.from('tutors_classes_comfort').select(`*`).eq('tutor_id', id).maybeSingle()
-    const{error} = await supabase.from('tutors_classes_comfort').update({[subjtodb[subj.subj]]:`${data[subjtodb[subj.subj]].split(' ')[0]} ${subj.sliderVal==1?0:subj.sliderVal}`}).eq('tutor_id', id)
+    await supabase.from('tutors_classes_comfort').update({[subjtodb[subj.subj]]:`${data[subjtodb[subj.subj]].split(' ')[0]} ${subj.sliderVal==1?0:subj.sliderVal}`}).eq('tutor_id', id)
   }
   await supabase.from('department_head_requests').delete().eq('tutor_id', id).eq('teacher_id',profile.teacher_id)
   const {data} = await supabase.from('profiles').select('name, email').eq('role', 'admin')
@@ -818,6 +856,7 @@ const sendAdminEmail=async(action)=>{
                 .catch((error) => console.log(error));
       }
 const handleUploadDataAdmin=async()=>{
+  handleHeadUpdateAdmin()
   let t={tutor_id: id}
   for (const sub of finishSubjects){
     t[sub.subj.toLowerCase()]=String(levelClasses[sub.subj.toLowerCase()]||0)+' '+String(finishSubjects.find(f=>f.subj==sub.subj).sliderVal)
@@ -830,6 +869,7 @@ const handleUploadDataAdmin=async()=>{
    })
    sendAdminEmail('approved')
   return
+
 }
 const handleRejectAdmin=async()=>{
   await supabase.from('profiles').update({ role: 'student' }).eq('id', id)
@@ -858,7 +898,7 @@ return (
                     {editable?'Class History': 'Tutor Profile: '+name}
                     </Text>
         {editable && <Button variant = 'light' style={{position:'absolute', bottom:'20px', right:'20px'}} onClick={handleFinished}>All set</Button>}
-        {!editable && <Button variant = 'outline' onClick={()=>{setMenuUp(true)}} style={{position:'absolute', bottom:'20px', right:'20px'}}><IconChevronLeft stroke={2} /></Button>}
+        {(!editable&&isRequest) && <Button variant = 'outline' onClick={()=>{setMenuUp(true)}} style={{position:'absolute', bottom:'20px', right:'20px'}}><IconChevronLeft stroke={2} /></Button>}
         </div>
         <div>
           {!editable&&<div style={{display:'flex', gap:'2px',justifyContent:'center'}}>
@@ -990,16 +1030,16 @@ return (
           color={subject.sliderVal<=50?`rgba(255,${(subject.sliderVal)*(255/50)},0,${(50-subject.sliderVal)/50+0.5})`:`rgba(${(100-subject.sliderVal)*(255/50)},255, 0,${(subject.sliderVal-50)/100+0.5})`}
                 style={{width:'200px'}}
                 value={subject.sliderVal}
-                onChange={(newValue) => {if(profile.teacher_id){handleSliderChangeBig(newValue, subject.subj)}}}
+                onChange={(newValue) => {handleSliderChangeBig(newValue, subject.subj)}}
           />
         
         </div>
       ))}
       
-      {(!profile.teacher_id&& readyAdmin)&&<div stle={{paddingBottom:'20px'}}>
+      {(!profile.teacher_id)&&<div stle={{paddingBottom:'20px'}}>
       <TextInput label={"Message to " +name} style={{height:'30px'}}value={message} onChange={(e) => setMessage(e.target.value)}/>
         </div>}
-      {(!profile.teacher_id&& readyAdmin)&&
+      {(!profile.teacher_id)&&
       <div style={{display:'flex', gap:'10px',justifyContent:'flex-end', paddingTop:'50px'}}>
       <Button variant='light' onClick={handleUploadDataAdmin}>Approve</Button>
       <Button variant='light' color='red' onClick={handleRejectAdmin}>Reject</Button>
