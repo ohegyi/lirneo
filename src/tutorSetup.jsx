@@ -871,7 +871,7 @@ const handleUploadDataAdmin=async()=>{
    sendAdminEmail('approved')
   return
 
-}
+}//here
 const handleRejectAdmin=async()=>{
   await supabase.from('profiles').update({ role: 'student' }).eq('id', id)
   await supabase.from('tutors').delete().eq('id', tutor_id)
