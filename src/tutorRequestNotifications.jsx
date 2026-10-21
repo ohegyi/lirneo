@@ -25,6 +25,7 @@ export default function TutorRequestNotifications() {
     const[finishedApps, setFinishedApps]=useState([])
     const [tutorBeRequests, setTutorBeRequests] = useState([])
     const [avsTutors, setAvsTutors]=useState({})
+    const [avsTutorsR, setAvsTutorsR]=useState({})
     const [mode1, setMode1]=useState(0)
     //[posted, pending]
     const [pending, setPending] = useState([{},{}])
@@ -33,6 +34,7 @@ export default function TutorRequestNotifications() {
     const [mainMode, setMainMode] = useState(startMainMode)
     const [infoShort, setInfoShort] = useState(false)
     const [curIndex, setCurIndex]=useState(0)
+    const [tutorsR, setTutorsR]=useState([])
     const [role, setRole] = useState('')
     const [infoPost, setInfoPost] = useState(false)
     const [infoMatch, setInfoMatch] = useState(false)
@@ -84,6 +86,7 @@ export default function TutorRequestNotifications() {
                     await getTutorApplications()
                     getUpdatedTutorApplications()
                 getAllTutors()
+                getTutorsR()
         setLoad(false)
         };
         getUser();
@@ -163,6 +166,14 @@ export default function TutorRequestNotifications() {
                 let avs=data.map(item=>item.avatar_url)
             setAvsTutorsReal(await getAvatarUrl(avs))
             setTutorsReal(data)
+            }
+  }
+  const getTutorsR=async()=>{
+    const {data}=await supabase.from('profiles').select('avatar_url, name,email,id').eq('role','studentR')
+    if(data){
+                let avs=data.map(item=>item.avatar_url)
+            setAvsTutorsR(await getAvatarUrl(avs))
+            setTutorsR(data)
             }
   }
     const getUpdatedTutorApplications=async()=>{
@@ -460,6 +471,7 @@ export default function TutorRequestNotifications() {
         { label: 'New', value: 0 },
         { label: 'Updates', value: 1 },
         ...(profile.role=='admin'?[{ label: 'Finished', value: 3 }]:[]),
+        ...(profile.role=='admin'?[{ label: 'Rejected', value: 4 }]:[]),
         ...(profile.role=='admin'?[{ label: 'Approved', value: 2 }]:[])
       ]}
     />
@@ -506,6 +518,20 @@ export default function TutorRequestNotifications() {
                     isRequest:false,
             }})
             }}imageSrc={avsTutorsReal[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
+            {(tutorsR.length>0 && mode1==4) && tutorsR.map(item=>
+        <Grid.Col
+                                span={{ base: 12, md: 4, lg: 3 }}
+                                key ={item.id}>
+            <ProfileCard onPress={()=>{
+                navigate('/tutorSetup',{state:{
+                    id:item.id,
+                    name:item.name,
+                    email:item.email,
+                    done:done,
+                    editable:false,
+                    isRequest:false,
+            }})
+            }}imageSrc={avsTutorsR[item.avatar_url]} name={item.name} cardType ='Active'/></Grid.Col>)}
 
         {(finishedApps.length>0 && mode1==3) && finishedApps.map(item=>
         <Grid.Col

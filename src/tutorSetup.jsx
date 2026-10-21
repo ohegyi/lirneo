@@ -873,9 +873,9 @@ const handleUploadDataAdmin=async()=>{
 
 }//here
 const handleRejectAdmin=async()=>{
-  await supabase.from('profiles').update({ role: 'student' }).eq('id', id)
-  await supabase.from('tutors').delete().eq('id', tutor_id)
-  await supabase.from('tutors').delete().eq('id', tutor_id)
+  await supabase.from('profiles').update({ role: 'studentR' }).eq('id', id)
+  await supabase.from('tutors').delete().eq('id', id)
+  await supabase.from('tutors').delete().eq('id', id)
   navigate('/tutorRequestNotifications',{state:{startMainMode:1}})
   notifications.show({
       title: 'Tutor Application Closed',

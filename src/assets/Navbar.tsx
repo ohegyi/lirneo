@@ -45,6 +45,14 @@ const mockdata = {
   { icon: IconLaurelWreath, label: 'Latin Practice', path:'/mainForm' },
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
+'studentR':[
+  { icon: IconHome2, label: 'Home', path:'/home'},
+  { icon: IconCategory, label: 'Dashboard', path:'/studentDash'},
+  { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
+  { icon: IconMessagePlus, label: 'Request a Tutor', path:'/tutoringRequest' },
+  { icon: IconLaurelWreath, label: 'Latin Practice', path:'/mainForm' },
+  { icon: IconUser, label: 'Profile', path:'/myProfile' },
+],
 'tutor':[
   { icon: IconHome2, label: 'Home', path:'/home'},
   { icon: IconCategory, label: 'Dashboard', path:'/studentDash'},
