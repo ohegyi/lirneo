@@ -898,7 +898,7 @@ return (
                     {editable?'Class History': 'Tutor Profile: '+name}
                     </Text>
         {editable && <Button variant = 'light' style={{position:'absolute', bottom:'20px', right:'20px'}} onClick={handleFinished}>All set</Button>}
-        {(!editable&&isRequest) && <Button variant = 'outline' onClick={()=>{setMenuUp(true)}} style={{position:'absolute', bottom:'20px', right:'20px'}}><IconChevronLeft stroke={2} /></Button>}
+        {(!editable) && <Button variant = 'outline' onClick={()=>{setMenuUp(true)}} style={{position:'absolute', bottom:'20px', right:'20px'}}><IconChevronLeft stroke={2} /></Button>}
         </div>
         <div>
           {!editable&&<div style={{display:'flex', gap:'2px',justifyContent:'center'}}>
@@ -1039,7 +1039,7 @@ return (
       {(!profile.teacher_id)&&<div stle={{paddingBottom:'20px'}}>
       <TextInput label={"Message to " +name} style={{height:'30px'}}value={message} onChange={(e) => setMessage(e.target.value)}/>
         </div>}
-      {(!profile.teacher_id)&&
+      {(!profile.teacher_id &&isRequest)&&
       <div style={{display:'flex', gap:'10px',justifyContent:'flex-end', paddingTop:'50px'}}>
       <Button variant='light' onClick={handleUploadDataAdmin}>Approve</Button>
       <Button variant='light' color='red' onClick={handleRejectAdmin}>Reject</Button>
@@ -1047,7 +1047,7 @@ return (
       {profile.teacher_id&&
       <div>
       <div style={{position:'absolute', bottom:profile.role.substring(0,4)=='head'?'60px':'10px', right:'10px'}}>
-      {isRequest&&<Button variant='light' onClick={handleHeadUpdate}>Next<IconChevronRight stroke={2}/></Button>}
+      <Button variant='light' onClick={handleHeadUpdate}>Next<IconChevronRight stroke={2}/></Button>
       </div>
       {profile.role.substring(0,4)=='head'&&<div style={{position:'absolute', bottom:'10px', right:'10px'}}>
         <Button variant='white' style={{color:'black',fontSize: '10px'}}onClick={()=>{
