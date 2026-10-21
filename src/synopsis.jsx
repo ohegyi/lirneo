@@ -186,7 +186,9 @@ export default function Synopsis(){
                                                                                       </div>
         {Object.entries(valsRestructured).map(([key, val])=>(
             <div key={key} style={{paddingTop:'20px'}}>
-                {Object.entries(val).every(element => element != false)&&<Text style={{paddingBottom:'2px'}}>{key}:</Text>}
+                {!Object.values(val).every(value => !value) && (
+                <Text style={{ paddingBottom: 2 }}>{key}:</Text>
+                )}
                 <Grid key={key}>
                     {Object.entries(val).map(([nameTense, valTense])=>
                         (valTense&&(<Grid.Col key={nameTense}  style={{gap:'10px', justifyContent: 'center', display:'flex', flexDirection:'row', width:'100%'}}>
@@ -216,7 +218,11 @@ export default function Synopsis(){
                 </Grid>
             </div>
         ))}
-    <Button style={{position:'fixed', bottom:'20px', right:'20px', zIndex:100000}} onClick={()=>{setAgain(prev=>prev+1)}}><IconReload stroke={1}/>Again</Button>
+    <Button style={{position:'fixed', bottom:'20px', right:'20px', zIndex:100000}} onClick={()=>{
+        console.log('here')
+        setAgain(prev=>prev+1)
+        setUserAnswers({})
+        }}><IconReload stroke={1}/>Again</Button>
     </div>
     
    )
