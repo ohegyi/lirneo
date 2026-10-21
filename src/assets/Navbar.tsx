@@ -5,6 +5,7 @@ import {
   IconCategory,
   IconUser,
   IconMessagePlus,
+  IconLaurelWreath,
   IconLogout
 } from '@tabler/icons-react';
 import defaultImg from './default.jpg'
@@ -41,6 +42,7 @@ const mockdata = {
   { icon: IconCategory, label: 'Dashboard', path:'/studentDash'},
   { icon: IconCalendarTime, label: 'Schedule', path:'/calendar'},
   { icon: IconMessagePlus, label: 'Request a Tutor', path:'/tutoringRequest' },
+  { icon: IconLaurelWreath, label: 'Latin Practive', path:'/mainForm' },
   { icon: IconUser, label: 'Profile', path:'/myProfile' },
 ],
 'tutor':[

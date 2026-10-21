@@ -1047,7 +1047,7 @@ return (
       {profile.teacher_id&&
       <div>
       <div style={{position:'absolute', bottom:profile.role.substring(0,4)=='head'?'60px':'10px', right:'10px'}}>
-      <Button variant='light' onClick={handleHeadUpdate}>Next<IconChevronRight stroke={2}/></Button>
+      {isRequest&&<Button variant='light' onClick={handleHeadUpdate}>Next<IconChevronRight stroke={2}/></Button>}
       </div>
       {profile.role.substring(0,4)=='head'&&<div style={{position:'absolute', bottom:'10px', right:'10px'}}>
         <Button variant='white' style={{color:'black',fontSize: '10px'}}onClick={()=>{

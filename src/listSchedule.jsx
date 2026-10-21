@@ -2,8 +2,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 import { useEffect, useState } from "react";
 import { Button, Divider, Grid, Input, Loader, Text, TextInput } from "@mantine/core";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import emailjs from '@emailjs/browser';
 import ProfileCard from "./assets/ProfileCard";
 import { useAuth } from "./lib/useAuth";

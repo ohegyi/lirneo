@@ -1,6 +1,6 @@
 import './index.css'
   import { useState, useEffect } from 'react'
-  import { Alert, Badge, Button, Card, Divider, Input, Loader, Notification, Select, Slider, Text, TextInput } from '@mantine/core';
+  import { Badge, Button, Card, Divider, Loader, Select, Text, TextInput } from '@mantine/core';
   import { DayPilotCalendar, DayPilot } from "@daypilot/daypilot-lite-react";
   import { supabase } from './lib/supabase'
 import './lib/notifications.css';
@@ -16,7 +16,6 @@ import { TimePicker } from '@mantine/dates';
 import { useAuth } from './lib/useAuth';
 import defaultImg from './assets/default.jpg'
 import { notifications } from '@mantine/notifications';
-  const icon = <IconInfoCircle />
   export default function AdminSchedule() {
     const navigate = useNavigate();
     const { state } = useLocation();

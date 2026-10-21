@@ -20,6 +20,8 @@ import ProtectedRoute from './lib/protectedRoute.jsx';
 import { Notifications } from '@mantine/notifications';
 import MyProfile from './myProfile.jsx';
 import StudentDash from './studentDash.jsx';
+import MainForm from './mainForm';
+import Synopsis from './synopsis';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
   {
     path: "/Calendar",
     element: <Calendar />,
+  },
+  {
+    path: "/mainForm",
+    element: <MainForm />,
+  },
+  {
+    path: "/synopsis",
+    element: <Synopsis />,
   },
   {
     path: "/listSchedule",
