@@ -283,7 +283,7 @@ const addStudentClass = async(classid,index,teacher)=>{
 const handleUploadData=async()=>{
   let t ='new'
   navigate('/home')
-  if (profile.role=='student'||profile.role=='tutor'){
+  if (profile.role=='student'||profile.role=='tutor'||profile.role=='studentR'){
       await supabase.from('profiles').update({role: 'tutor'}).eq('id', user.id)
   }else if(profile.role=='tutorConfirmed'||profile.role=='tutorUpdated'){
       await supabase.from('profiles').update({role: 'tutorUpdated'}).eq('id', user.id)
@@ -839,7 +839,7 @@ const sendOrigAdmin=async(adminName, adminEmail)=>{
 const sendAdminEmail=async(action)=>{
         const templateParams = {
                 name : name,
-                action:'approved'?'We are pleased to extend you a position as a tutor.':'Unfortunately, at this time, we are not able to extend you a position.',
+                action:action=='approved'?'We are pleased to extend you a position as a tutor.':'Unfortunately, at this time, we are not able to extend you a position.',
                 email: email,
                 note: message?'A note from '+ profile.name+": "+message:''
             };
@@ -874,8 +874,8 @@ const handleUploadDataAdmin=async()=>{
 }//here
 const handleRejectAdmin=async()=>{
   await supabase.from('profiles').update({ role: 'studentR' }).eq('id', id)
-  await supabase.from('tutors').delete().eq('id', id)
-  await supabase.from('tutors').delete().eq('id', id)
+  const {error}=await supabase.from('tutors').delete().eq('tutor_id', id)
+  console.log(error)
   navigate('/tutorRequestNotifications',{state:{startMainMode:1}})
   notifications.show({
       title: 'Tutor Application Closed',

@@ -227,7 +227,7 @@ import { notifications } from '@mantine/notifications';
       }
   },[activeUsers])
     const getUsers=async()=>{
-      const{data, error}=id? await supabase.from('tutors').select('*, profiles(*)'): await supabase.from('profiles').select()
+      const{data, error}=id? await supabase.from('tutors').select('*, profiles(*)'): await supabase.from('profiles').select().eq('role', 'tutorConfirmed')
       let g = data[0]
       let allUsers=[]
       let avs=[g.profiles.avatar_url]
@@ -237,7 +237,7 @@ import { notifications } from '@mantine/notifications';
         allUsers.push({'id':p.profiles.id, 'avatar_url':p.profiles.avatar_url,'email':p.profiles.email, 'name': p.profiles.name})
         avs.push(p.profiles.avatar_url)
           let temp = {'id':p.profiles.id, 'avatar_url':p.profiles.avatar_url,'email':p.profiles.email, 'name': p.profiles.name,'science':p.science,'math':p.math,'english':p.english,'history':p.history,'french':p.french,'spanish':p.spanish,'chinese':p.chinese,'latin':p.latin,'greek':p.greek,'computer science':p['computer science']}
-          if(parseInt(p[target].split(' ')[0])>=level && parseInt(p[target].split(' ')[1]!='0')){
+          if(parseInt(p[target].split(' ')[0])>=level && parseInt(p[target].split(' ')[1])!=0){
             let lowBound = 0
            let highBound = r.length-1
            let mid = Math.floor((r.length-1)/2)
@@ -1052,7 +1052,7 @@ import { notifications } from '@mantine/notifications';
       </div>
   ))}</div>}
       </>
-      <div style={{paddingTop:'10px'}}>
+      <div style={{display:'flex', flexDirection:'column', paddingTop:'10px', alignItems:'flex-start', gap:'10px', paddingLeft:'10px'}}>
           {!searchItem && recomended
           .filter(u => activeUsers.every(a => a.id !== u.id))
           .map(user1 => (

@@ -73,7 +73,7 @@ export default function MyProfile(){
     width: '100%',
   }}>
         <Text onClick={()=>{
-                  if(profile.role=='student' || profile.role =='tutor' || profile.role=='tutorConfirmed'|| profile.role=='tutorApp' || profile.role=='tutorUpdated'){
+                  if(profile.role=='student' || profile.role =='tutor' || profile.role =='studentR' || profile.role=='tutorConfirmed'|| profile.role=='tutorApp' || profile.role=='tutorUpdated'){
                     navigate('/tutorSetup', {state:{id:profile.id, editable:true}})
                   }
         }} size='10vh' fw={700} component="span" variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}>{profile.role=='student'?'Become a tutor':(profile.role=='admin'|| profile.role=='teacher'|| profile.role.substring(0,4)=='head')?'A lot of tutoring':'Update your tutoring profile'}</Text>
