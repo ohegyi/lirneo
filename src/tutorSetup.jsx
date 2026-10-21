@@ -864,7 +864,7 @@ const handleUploadDataAdmin=async()=>{
   }
   await supabase.from('tutors').upsert(t)
   await supabase.from('profiles').update({ role: 'tutorConfirmed' }).eq('id', id)
-  navigate('/home')
+  navigate('/tutorRequestNotifications',{state:{startMainMode:1}})
   notifications.show({
       title: 'Tutor Application Closed',
    })
@@ -876,7 +876,7 @@ const handleRejectAdmin=async()=>{
   await supabase.from('profiles').update({ role: 'student' }).eq('id', id)
   await supabase.from('tutors').delete().eq('id', tutor_id)
   await supabase.from('tutors').delete().eq('id', tutor_id)
-  navigate('/home')
+  navigate('/tutorRequestNotifications',{state:{startMainMode:1}})
   notifications.show({
       title: 'Tutor Application Closed',
    })
@@ -1044,6 +1044,13 @@ return (
       <div style={{display:'flex', gap:'10px',justifyContent:'flex-end', paddingTop:'50px'}}>
       <Button variant='light' onClick={handleUploadDataAdmin}>Approve</Button>
       <Button variant='light' color='red' onClick={handleRejectAdmin}>Reject</Button>
+      </div>}
+      {(!profile.teacher_id &&!isRequest)&&
+      <div style={{display:'flex', gap:'10px',justifyContent:'flex-end', paddingTop:'50px'}}>
+      <Button variant='light' onClick={()=>{
+        handleHeadUpdateAdmin()
+        navigate('/tutorRequestNotifications',{state:{startMainMode:1}})
+        }}>Update</Button>
       </div>}
       {profile.teacher_id&&
       <div>
