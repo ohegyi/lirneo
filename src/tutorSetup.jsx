@@ -835,6 +835,7 @@ const sendOrigAdmin=async(adminName, adminEmail)=>{
                 )
                 .catch((error) => console.log(error));
 }
+//temp
 const sendAdminEmail=async(action)=>{
         const templateParams = {
                 name : name,
@@ -1035,7 +1036,7 @@ return (
         
         </div>
       ))}
-      
+
       {(!profile.teacher_id)&&<div stle={{paddingBottom:'20px'}}>
       <TextInput label={"Message to " +name} style={{height:'30px'}}value={message} onChange={(e) => setMessage(e.target.value)}/>
         </div>}
