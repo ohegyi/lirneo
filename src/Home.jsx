@@ -35,10 +35,17 @@ style={{position: 'relative'}}
             style={{fontSize:'140px'}}
             falloff="linear"
           />
+          </div>
+          </div>
+          </div>
+          <div style={{position:'absolute',zIndex: 10, top:200, left:300}}>
+        <div style={{position:'absolute', top:0,left:0}}>
+              <div style={{display:'flex', flexDirection:'row', width:'800px'}}>
           {profile.role=='student'&&<Button variant='white' onClick={()=>{
       navigate('/tutoringRequest', {state:{id:profile.id, editable:true}})
       }}>
-    <div style={{color:'black',display:'flex', alignItems:'center',justifyContent:'center'}}>
+
+    <div style={{color:'black',display:'flex', flexDirection:'row', alignItems:'center'}}>
   <SplitText
   text='Submit a tutoring request'
   className="text-2xl font-semibold text-center"
