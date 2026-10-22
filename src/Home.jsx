@@ -36,11 +36,31 @@ style={{position: 'relative'}}
             falloff="linear"
           />
           {profile.role=='student'&&<Button variant='white' onClick={()=>{
-      navigate('/tutorSetup', {state:{id:profile.id, editable:true}})
+      navigate('/tutoringRequest', {state:{id:profile.id, editable:true}})
       }}>
     <div style={{color:'black',display:'flex', alignItems:'center',justifyContent:'center'}}>
   <SplitText
-  text='Apply to be a tutor'
+  text='Submit a tutoring request'
+  className="text-2xl font-semibold text-center"
+  delay={100}
+  duration={1}
+  ease="power3.out"
+  splitType="chars"
+  from={{ opacity: 0, y: 40 }}
+  to={{ opacity: 1, y: 0 }}
+  threshold={0.1}
+  rootMargin="-100px"
+  textAlign="center"
+  showCallback
+/>
+</div>
+</Button>}
+{(profile.role!='teacher'&&profile.role!='admin')&&<Button variant='white' onClick={()=>{
+      navigate('/calendar', {state:{id:profile.id, editable:true}})
+      }}>
+    <div style={{color:'black',display:'flex', alignItems:'center',justifyContent:'center'}}>
+  <SplitText
+  text='Fill out your schedule'
   className="text-2xl font-semibold text-center"
   delay={100}
   duration={1}

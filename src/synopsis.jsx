@@ -105,6 +105,7 @@ export default function Synopsis(){
                         if (moodName=='participle'&&tenseName=='perfect'&&voice=='active'){
                             answers[`${moodName+'-'+tenseName+'-'+'passive'}`]=verb.formVerb()
                         }else if(!(moodName=='participle'&&tenseName=='perfect'&&voice=='passive')){
+                            console.log(verb.formVerb())
                             answers[`${moodName+'-'+tenseName+'-'+voice}`]=verb.formVerb()
                         }
                 }
@@ -206,7 +207,7 @@ export default function Synopsis(){
                                 styles={{
         input: {
             borderColor:
-                userAnswers.length>0&&userAnswers[`${key}-${nameTense}-${item}`] == answers[`${key}-${nameTense}-${item}`]
+                userAnswers[`${key}-${nameTense}-${item}`] == answers[`${key}-${nameTense}-${item}`]
                     ? 'green'
                     : !userAnswers[`${key}-${nameTense}-${item}`]?'grey':'red'
         }
