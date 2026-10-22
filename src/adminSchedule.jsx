@@ -228,34 +228,45 @@ import { notifications } from '@mantine/notifications';
   },[activeUsers])
     const getUsers=async()=>{
       const{data, error}=id? await supabase.from('tutors').select('*, profiles(*)'): await supabase.from('profiles').select().eq('role', 'tutorConfirmed')
-      let g = data[0]
-      let allUsers=[]
-      let avs=[g.profiles.avatar_url]
-      let r = [{'id':g.profiles.id, 'avatar_url':g.profiles.avatar_url,'email':g.profiles.email, 'name': g.profiles.name,'chemistry':g.chemistry,'physics':g.physics, 'biology': g.biology, 'ecology':g.ecology,'math':g.math,'english':g.english,'history':g.history,'french':g.french,'spanish':g.spanish,'chinese':g.chinese,'latin':g.latin,'greek':g.greek,'computer science':g['computer science']}]
-      for (let i=0; i<data.length; i++){
+      if (data){
+        let avs = data.map(item=>item.profiles.avatar_url) 
+        let t1 = await getAvatarUrl(avs)
+        let allUsers=[]
+      let r=[]
+      for (let i=1; i<data.length; i++){
         let p = data[i]
         allUsers.push({'id':p.profiles.id, 'avatar_url':p.profiles.avatar_url,'email':p.profiles.email, 'name': p.profiles.name})
         avs.push(p.profiles.avatar_url)
-          let temp = {'id':p.profiles.id, 'avatar_url':p.profiles.avatar_url,'email':p.profiles.email, 'name': p.profiles.name,'science':p.science,'math':p.math,'english':p.english,'history':p.history,'french':p.french,'spanish':p.spanish,'chinese':p.chinese,'latin':p.latin,'greek':p.greek,'computer science':p['computer science']}
-          if(parseInt(p[target].split(' ')[0])>=level && parseInt(p[target].split(' ')[1])!=0){
-            let lowBound = 0
-           let highBound = r.length-1
-           let mid = Math.floor((r.length-1)/2)
-           while (lowBound!=highBound){
-             if (p[target].split(' ')[1]>r[mid][target].split(' ')[1]){
-               lowBound=mid
-             }else{
-               highBound=mid
-             }
-             mid=Math.floor((lowBound+highBound)/2)
-           }
-           r.splice(lowBound,0, temp)
-  
+          let temp = {'id':p.profiles.id, 'email':p.profiles.email, 'name': p.profiles.name,'avatar_url': p.profiles.avatar_url,'chemistry':p.chemistry,'physics':p.physics,'ecology':p.ecology,'biology':p.biology,'math':p.math,'english':p.english,'history':p.history,'french':p.french,'spanish':p.spanish,'chinese':p.chinese,'latin':p.latin,'greek':p.greek,'computer science':p['computer science']}
+          if(parseInt(temp[target].split(' ')[0])>=level){
+            if (r.length==0){
+              r.push(temp)
+            }else{
+              let lowBound = 0;
+              let highBound = r.length;
+
+              while (lowBound < highBound) {
+                let mid = Math.floor((lowBound + highBound) / 2);
+
+                if (
+                  temp[target].split(' ')[1] >
+                  r[mid][target].split(' ')[1]
+                ) {
+                  lowBound = mid + 1;
+                } else {
+                  highBound = mid;
+                }
+              }
+
+              r.splice(lowBound, 0, temp);
+            }
           }
       }
-      setAvatars(await getAvatarUrl(avs))
+      setAvatars(t1)
       setRecomended(r)
       setUsers(allUsers)
+      }
+      
       return true
   }
   const handleInputChange = (e) => { 
