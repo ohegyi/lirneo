@@ -554,11 +554,6 @@ import { notifications } from '@mantine/notifications';
                 templateParams,
                 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
                 )
-                .then(() => {
-                    notifications.show({
-                                        title: 'Email sent',
-                                    })
-                })
                 .catch((error) => console.log(error));
       }
       const sendAdmin=async(name)=>{
@@ -604,11 +599,6 @@ import { notifications } from '@mantine/notifications';
               templateParams,
               import.meta.env.VITE_EMAILJS_PUBLIC_KEY
               )
-              .then(() => {
-                  notifications.show({
-                                      title: 'Email sent',
-                                  })
-              })
               .catch((error) => console.log(error));
     }
       
@@ -662,11 +652,7 @@ import { notifications } from '@mantine/notifications';
                 templateParams,
                 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
                 )
-                .then(() => {
-                    notifications.show({
-                                        title: 'Email sent',
-                                    })
-                })
+
                 .catch((error) => console.log(error));
     }
   const addPreview=(events1, num, indexCur, pu)=>{
@@ -807,11 +793,6 @@ import { notifications } from '@mantine/notifications';
               templateParams,
               import.meta.env.VITE_EMAILJS_PUBLIC_KEY
               )
-              .then(() => {
-                  notifications.show({
-                    title: 'Email sent',
-                })
-              })
               .catch((error) => console.log(error));
       };
   return (

@@ -49,22 +49,22 @@ export default function ListSchedule() {
               r.push(temp)
             }else{
               let lowBound = 0;
-let highBound = r.length;
+              let highBound = r.length;
 
-while (lowBound < highBound) {
-  let mid = Math.floor((lowBound + highBound) / 2);
+              while (lowBound < highBound) {
+                let mid = Math.floor((lowBound + highBound) / 2);
 
-  if (
-    temp[target].split(' ')[1] >
-    r[mid][target].split(' ')[1]
-  ) {
-    lowBound = mid + 1;
-  } else {
-    highBound = mid;
-  }
-}
+                if (
+                  temp[target].split(' ')[1] >
+                  r[mid][target].split(' ')[1]
+                ) {
+                  lowBound = mid + 1;
+                } else {
+                  highBound = mid;
+                }
+              }
 
-r.splice(lowBound, 0, temp);
+              r.splice(lowBound, 0, temp);
             }
           }
       }

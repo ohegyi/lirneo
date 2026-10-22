@@ -58,7 +58,7 @@ export default function ClassCard({className,subject,nature=false, avatar_url=fa
 </div>
         ))}
       <Card.Section  width='100%' padding="0" px="0" >
-        {true &&  <Box w='50cqw'truncate="end" style={{position:'absolute',
+        {avatar_url &&  <Box w='50cqw'truncate="end" style={{position:'absolute',
         bottom:'2%',
         left:'52%',display:'flex'}}>
            <img src={avatar_url??defaultImg}
