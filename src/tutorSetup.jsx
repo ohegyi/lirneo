@@ -624,7 +624,7 @@ const sendEmailError = (name1, email,subject) => {
 const getStudentClasses=async(x)=>{
     const {data,error}=await supabase.from('tutor_class').select(('Classes(*), years_ago, teacher_name')).eq('tutor_id',id)
     let t=[[],[],[],[],[]]
-    let levels={'science':0,'math':0,'english':0,'history':0,'french':0,'mandarin':0,'spanish':0,'latin':0,'greek':0,'cs':0}
+    let levels={'physics':0,'biology':0,'ecology':0,'chemistry':0,'math':0,'english':0,'history':0,'french':0,'mandarin':0,'spanish':0,'latin':0,'greek':0,'cs':0}
     let subj=''
     let j=x
     for (const p of data){
@@ -663,9 +663,13 @@ const getStudentClasses=async(x)=>{
         }
       );
       levels[subj] = levels[subj] < p.Classes.level ? p.Classes.level : levels[subj]
+      if(subj=='physics'){
+        
+      }
       t[p.years_ago]=[...t[p.years_ago], { 'id':p.Classes.id, 'name':p.Classes.name, 'subject':p.Classes.subject, teacherName: p.teacher_name, backColor:'white'}]
 
       }
+      console.log('levels',levels)
     setLevelClasses(levels)
      if (target){
       setCurSubject(heretoThere[target])
@@ -808,7 +812,7 @@ const sendSubjectAdmin=async(adminName, adminEmail)=>{
                 .catch((error) => console.log(error));
 }
 const sendEmailHead=async(teacherName, teacherEmail)=>{
-  const templateParams = {
+    const templateParams = {
                 email : teacherEmail,
                 name : name ?? profile.name,
                 teacher : teacherName,
@@ -820,6 +824,7 @@ const sendEmailHead=async(teacherName, teacherEmail)=>{
                 import.meta.env.VITE_EMAILJS_PUBLIC_KEY
                 )
                 .catch((error) => console.log(error));
+  
 }
 const sendOrigAdmin=async(adminName, adminEmail)=>{
   const templateParams = {
@@ -860,6 +865,7 @@ const handleUploadDataAdmin=async()=>{
   handleHeadUpdateAdmin()
   let t={tutor_id: id}
   for (const sub of finishSubjects){
+    console.log(levelClasses)
     t[sub.subj.toLowerCase()]=String(levelClasses[sub.subj.toLowerCase()]||0)+' '+String(finishSubjects.find(f=>f.subj==sub.subj).sliderVal)
   }
   await supabase.from('tutors').upsert(t)

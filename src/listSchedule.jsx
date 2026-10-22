@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 import ProfileCard from "./assets/ProfileCard";
 import { useAuth } from "./lib/useAuth";
 import { notifications } from "@mantine/notifications";
+import { IconChevronRight } from "@tabler/icons-react";
 
 export default function ListSchedule() {
   const navigate = useNavigate();
@@ -33,29 +34,42 @@ export default function ListSchedule() {
     if (data){
       let avs = data.map(item=>item.profiles.avatar_url) 
       let t1 = await getAvatarUrl(avs)
+      
       let t = data.filter(item=>item.profiles.id!=id)
-    let g = t[0]
-    let r = [{'id':g.profiles.id, 'email':g.profiles.email, 'name': g.profiles.name,'avatar_url': t1[g.profiles.avatar_url],'chemistry':g.chemistry,'physics':g.physics, 'biology': g.biology, 'ecology':g.ecology,'math':g.math,'english':g.english,'history':g.history,'french':g.french,'spanish':g.spanish,'chinese':g.chinese,'latin':g.latin,'greek':g.greek,'computer science':g['computer science']}]
+    let r=[]
     if (t.length>1){
       for (let i=1; i<t.length; i++){
         let p = t[i]
-          let temp = {'id':p.profiles.id, 'email':p.profiles.email, 'name': p.profiles.name,'avatar_url': t1[p.profiles.avatar_url],'science':p.science,'math':p.math,'english':p.english,'history':p.history,'french':p.french,'spanish':p.spanish,'chinese':p.chinese,'latin':p.latin,'greek':p.greek,'computer science':p['computer science']}
-          if(parseInt(p[target].split(' ')[0])>=level){
-            let lowBound = 0
-          let highBound = r.length-1
-          let mid = Math.floor((r.length-1)/2)
-          while (lowBound!=highBound){
-            if (p[target].split(' ')[1]>r[mid][target].split(' ')[1]){
-              lowBound=mid
+        console.log(t[i])
+          let temp = {'id':p.profiles.id, 'email':p.profiles.email, 'name': p.profiles.name,'avatar_url': t1[p.profiles.avatar_url],'chemistry':p.chemistry,'physics':p.physics,'ecology':p.ecology,'biology':p.biology,'math':p.math,'english':p.english,'history':p.history,'french':p.french,'spanish':p.spanish,'chinese':p.chinese,'latin':p.latin,'greek':p.greek,'computer science':p['computer science']}
+          console.log(temp[target])
+          if(parseInt(temp[target].split(' ')[0])>=level){
+            if (r.length==0){
+              console.log('here')
+              r.push(temp)
             }else{
-              highBound=mid
+              let lowBound = 0;
+let highBound = r.length;
+
+while (lowBound < highBound) {
+  let mid = Math.floor((lowBound + highBound) / 2);
+
+  if (
+    temp[target].split(' ')[1] >
+    r[mid][target].split(' ')[1]
+  ) {
+    lowBound = mid + 1;
+  } else {
+    highBound = mid;
+  }
+}
+
+r.splice(lowBound, 0, temp);
             }
-            mid=Math.floor((lowBound+highBound)/2)
-          }
-          r.splice(lowBound,0, temp)
           }
       }
     }
+    console.log(r)
     setUsers(r)
     }
 
@@ -82,9 +96,6 @@ return (
                           </div>
         <div style={{paddingBottom:'20px', display:'flex', justifyContent:'center'}}>
           <div style={{paddingRight:'2px'}}>
-          <Button onClick={()=>{
-          handleNext()
-        }}>email</Button>
         </div>
         <Button variant = 'light' onClick={()=>{
             navigate('/adminSchedule', {state:{request_id: requestId,id: id, admin:true, editable:false, name: name, className: className, target:target, level:level}})
@@ -97,6 +108,7 @@ return (
                             </div>
                             )
                         }
+                        <Button style={{position:'fixed', bottom:'20px', right:'20px'}} onClick={handleNext}>Email <IconChevronRight stroke={2}/></Button>
     <Grid align="stretch" style={{width:'100%'}}>
     {users.map((request)=>(
                 <Grid.Col key = {request.id} span={{ base: 12, md: 4, lg: 3 }} style={{

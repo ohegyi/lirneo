@@ -477,7 +477,7 @@ export default function TutorRequestNotifications() {
     />
     <div style={{padding:'20px', alignItems:'center'}}><div style={{width:'90%'}}>
     <Grid align="stretch">
-        {(tutorBeRequests.length>0 && mode1==0) && tutorBeRequests.filter(item=>!done.includes(item.id)).map(item=>
+        {(tutorBeRequests.length>0 && mode1==0) && tutorBeRequests.filter(item=>(!done.includes(item.id))).map(item=>
         <Grid.Col
                                 span={{ base: 12, md: 4, lg: 3 }}
                                 key ={item.id}>

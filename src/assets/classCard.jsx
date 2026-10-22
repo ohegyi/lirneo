@@ -61,12 +61,12 @@ export default function ClassCard({className,subject,nature=false, avatar_url=fa
         {true &&  <Box w='50cqw'truncate="end" style={{position:'absolute',
         bottom:'2%',
         left:'52%',display:'flex'}}>
-           {true &&  <img src={avatar_url??defaultImg}
+           <img src={avatar_url??defaultImg}
             style={{
         width: '10cqw',
         height: '10cqw',
         borderRadius: '50%',
-        objectFit: 'cover'}}/>}
+        objectFit: 'cover'}}/>
         <Text fz="6cqw"  truncate="end">{className}</Text>
         </Box>}
         {!avatar_url&& <Box w='50cqw'truncate="end">
