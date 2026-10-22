@@ -8,7 +8,7 @@ export default function Synopsis(){
     const [userAnswers, setUserAnswers]=useState({})
     const [again,setAgain]=useState(0)
     const vals = state?.vals
-    let ind = vals.moods.indicative?{present:vals.tenses.present,imperfect:vals.tenses.imperfect,future:vals.tenses.future,perfect:vals.tenses.perfect,pluperfect:vals.tenses.pluperfect,'future perfect':vals.tenses['futue perfect']}:{present:false,imperfect:false,future:false,perfect:false,pluperfect:false,'future perfect':false}
+    let ind = vals.moods.indicative?{present:vals.tenses.present,imperfect:vals.tenses.imperfect,future:vals.tenses.future,perfect:vals.tenses.perfect,pluperfect:vals.tenses.pluperfect,'future perfect':vals.tenses['future perfect']}:{present:false,imperfect:false,future:false,perfect:false,pluperfect:false,'future perfect':false}
     let sub = vals.moods.subjunctive?{present:vals.tenses.present,imperfect:vals.tenses.imperfect,perfect:vals.tenses.perfect,pluperfect:vals.tenses.pluperfect}:{present:false,imperfect:false,perfect:false,pluperfect:false}
     let par = vals.moods.participle?{present:vals.tenses.present,perfect:vals.tenses.perfect,future:vals.tenses.future}:{present:false,perfect:false,future:false}
     let inf = vals.moods.infinitive?{present:vals.tenses.present,perfect:vals.tenses.perfect,future:vals.tenses.future}:{present:false,perfect:false,future:false}
@@ -124,12 +124,8 @@ export default function Synopsis(){
 }, [state.vals, again]);
     
     
-    function handleKeyDown(event){
-        if (
-    (target.tagName === "INPUT" && target.type === "text") ||
-    target.tagName === "TEXTAREA"
-  ) {
-    if (event.shiftKey){
+    const handleKeyDown = (event, itemKey) => {
+    if (event.shiftKey&&(event.key.toLowerCase()=='a'||event.key.toLowerCase()=='e'||event.key.toLowerCase()=='i'||event.key.toLowerCase()=='o')) {
         event.preventDefault()
         let newLetter= '';
         if (event.key.toLowerCase()==='a'){
@@ -145,15 +141,13 @@ export default function Synopsis(){
             newLetter='ō'
         }
         else {
-            newChar = event.key;
+            newLetter = event.key;
         }
-        const start=target.selectionStart;
-        const end = target.selectionEnd;
-        const value= target.value;
-        target.value=value.substring(0,start) + newLetter + value.substring(end)
-        target.selectionStart=target.selectionEnd = start+1;
+        let t= userAnswers[itemKey]??''
+        console.log(t+newLetter)
+        setUserAnswers({...userAnswers, [itemKey]:t+newLetter})
+        console.log(userAnswers)
     }
-  }
     }
    return (
     <div style={{paddingBottom:'40px'}}>
@@ -196,6 +190,7 @@ export default function Synopsis(){
                             {voices.map(item=>(
                                 <div>
                                 <TextInput 
+                                onKeyDown={(e) => handleKeyDown(e, `${key}-${nameTense}-${item}`)}
                                 disabled={(nameTense=='present'&&key=='participle'&&item=='passive')||(nameTense=='perfect'&&key=='participle'&&item=='active')}
                                 value={userAnswers[`${key}-${nameTense}-${item}`] ?? ''}
                                onChange={(e) => {

@@ -191,17 +191,17 @@ export default class RegularVerb {
   }
   
   findConjugation(){
-    if (this.infinative.charAt(this.infinative.length-3)=='ā'){
+    if (this.infinative.charAt(this.infinative.length-3)=='ā'||this.infinative.charAt(this.infinative.length-3)=='a'){
       this.indicLetter = "a";
       this.subjuncLetter = "e";
       this.conjugation = 1;
     }
-    else if (this.infinative.charAt(this.infinative.length-3)=='ē'){
+    else if (this.infinative.charAt(this.infinative.length-3)=='ē' ||this.pres1.charAt(this.pres1.length-2)=='e'){
         this.indicLetter = "e";
         this.subjuncLetter = "ea";
         this.conjugation = 2;
       }
-    else if (this.infinative.charAt(this.infinative.length-3)=='ī'){
+    else if (this.infinative.charAt(this.infinative.length-3)=='ī'||this.infinative.charAt(this.infinative.length-3)=='i'){
         this.conjugation = 5;
         this.indicLetter = "i";
         this.subjuncLetter = "ia";

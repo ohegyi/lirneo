@@ -75,7 +75,7 @@ const handleInputChange = (e) => {
         title:'Request Submitted'
       }
     )
-    navigate('/home')
+    navigate('/calendar')
     sendEmails()
     }else{
       alert("Fields left blank");
@@ -92,7 +92,7 @@ const handleInputChange = (e) => {
   const sendEmailRegister = (name, email) => {
         const templateParams = {
             name : name,
-            action: user.name+ ' has requested tutoring in '+class1+'.',
+            action: user.name+ ' has requested tutoring in '+searchItem+'.',
             email: email,
             note: message?'A note from '+ user.name+": "+message:''
         };
