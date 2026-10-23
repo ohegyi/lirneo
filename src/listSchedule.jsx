@@ -117,7 +117,7 @@ return (
                 }} >
       
                    <ProfileCard onPress={()=>{
-                          navigate('/tutorSetup', {state:{id:request.id, editable:false, name: name, target:target}})
+                          navigate('/tutorSetup', {state:{id:request.id, editable:false, name: request.name, target:target}})
                    }}cardType='list' onDelete={()=>{
                     setUsers(prev=>prev.filter(item=>item.id!=request.id))
                    }} imageSrc = {request.avatar_url} name={request.name}/>

@@ -466,7 +466,7 @@ import { notifications } from '@mantine/notifications';
     }
     const handleDoubleClick = (user1)=>{
       clearTimeout(clickTimeout.current)
-      navigate('/tutorSetup', {state:{id:curPerson, editable:false, name: name, target:target}})
+      navigate('/tutorSetup', {state:{id:curPerson, editable:false, name: user1.name, target:target}})
   
     }
   const addPeriod=async(s, e)=>{

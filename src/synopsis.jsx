@@ -105,7 +105,6 @@ export default function Synopsis(){
                         if (moodName=='participle'&&tenseName=='perfect'&&voice=='active'){
                             answers[`${moodName+'-'+tenseName+'-'+'passive'}`]=verb.formVerb()
                         }else if(!(moodName=='participle'&&tenseName=='perfect'&&voice=='passive')){
-                            console.log(verb.formVerb())
                             answers[`${moodName+'-'+tenseName+'-'+voice}`]=verb.formVerb()
                         }
                 }
@@ -125,7 +124,11 @@ export default function Synopsis(){
     
     
     const handleKeyDown = (event, itemKey) => {
-    if (event.shiftKey&&(event.key.toLowerCase()=='a'||event.key.toLowerCase()=='e'||event.key.toLowerCase()=='i'||event.key.toLowerCase()=='o')) {
+    if (event.key.toLowerCase() === 'enter'){
+            setAgain(prev=>prev+1)
+            setUserAnswers({})
+        }
+    else if (event.shiftKey&&(event.key.toLowerCase()=='a'||event.key.toLowerCase()=='e'||event.key.toLowerCase()=='i'||event.key.toLowerCase()=='o')) {
         event.preventDefault()
         let newLetter= '';
         if (event.key.toLowerCase()==='a'){
@@ -144,9 +147,7 @@ export default function Synopsis(){
             newLetter = event.key;
         }
         let t= userAnswers[itemKey]??''
-        console.log(t+newLetter)
         setUserAnswers({...userAnswers, [itemKey]:t+newLetter})
-        console.log(userAnswers)
     }
     }
    return (
@@ -215,7 +216,6 @@ export default function Synopsis(){
             </div>
         ))}
     <Button style={{position:'fixed', bottom:'20px', right:'20px', zIndex:100000}} onClick={()=>{
-        console.log('here')
         setAgain(prev=>prev+1)
         setUserAnswers({})
         }}><IconReload stroke={1}/>Again</Button>
